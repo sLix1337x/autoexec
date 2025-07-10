@@ -1,7 +1,7 @@
 # Counter-Strike 2 Configuration Hub | sLix1337
 
-
-Welcome to my CS2 Config Collection! This repository houses my personal Counter-Strike 2 configurations, autoexec, and other useful files to enhance my gaming experience.
+Welcome to my CS2 Config Collection!  
+This repository houses my personal Counter-Strike 2 configurations, autoexec, and other useful files to enhance my gaming experience.
 
 ## 📂 Repository Structure  
 ```bash
