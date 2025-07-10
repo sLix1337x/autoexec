@@ -29,9 +29,9 @@ cs2-configs/
  ```-threads 9 -noreflex ```  
 💡 Adjust thread count based on your CPU cores  
 
- **📜 License**  
-This project is open source under the MIT License.  
-
 ![222222222](https://github.com/user-attachments/assets/8746ba14-0430-4c65-ae32-c359e20f1259)  
+
+ ## 📜 License 
+This project is open source under the MIT License. 
 
 <div align="center"> <img src="https://img.shields.io/badge/CS2-Configs-orange?style=for-the-badge&logo=steam" alt="CS2 Configs"> <img src="https://img.shields.io/github/last-commit/yourusername/cs2-configs?style=for-the-badge" alt="Last Updated"> </div>
