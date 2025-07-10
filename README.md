@@ -12,7 +12,8 @@ cs2-configs/
 │   ├── ####  
 │   ├── ####  
 │   └── ####  
-└── ####       
+├── -jump.cfg
+└── +jump.cfg       
   ```
 
 ## ⚡ Autoexec Features  
