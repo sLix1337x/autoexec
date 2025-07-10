@@ -28,8 +28,8 @@ cs2-configs/
 
 ## `null_binds.cfg` (Essential)
 
-# 🌟 **Blue Highlight** Recommended Launch Options
--threads 9 -noreflex
+# 🌟 Recommended Launch Options
+**Blue Highlight** -threads 9 -noreflex
 
 
 # 📜 License
