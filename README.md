@@ -3,27 +3,32 @@ https://img.icons8.com/color/96/000000/counter-strike.png
 
 Welcome to my CS2 Config Collection! This repository houses my personal Counter-Strike 2 configurations, autoexec, and other useful files to enhance my gaming experience.
 
-cs2-configs/
-├── autoexec.cfg           # Main autoexec configuration
-├── null_binds.cfg         # nullbinds SOCD workaround for Valve Server
-├── movement/              # desubtick movement
-│   ├── ####
-│   ├── ####
-│   └── ####
-└── ####     
-
+cs2-configs/  
+├── autoexec.cfg           # Main autoexec configuration  
+├── null_binds.cfg         # nullbinds SOCD workaround for Valve Server  
+├── movement/              # desubtick movement  
+│   ├── ####  
+│   ├── ####  
+│   └── ####  
+└── ####       
+  
 
 # ⚡ Autoexec Features
 
-→ Optimized performance settings
-→ Custom key bindings for efficiency
-→ Network tweaks for better hitreg
-→ Aliases for common commands
-→ Grenade binds for quick throws
+→ Optimized performance settings   
+ 
+→ Custom key bindings for efficiency  
+
+→ Network tweaks for better hitreg  
+
+→ Aliases for common commands  
+
+→ Grenade binds for quick throws  
+
 
 ## `null_binds.cfg` (Essential)
 
-# 🌟 Recommended Launch Options
+# 🌟 **Blue Highlight** Recommended Launch Options
 -threads 9 -noreflex
 
 
