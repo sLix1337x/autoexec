@@ -5,15 +5,16 @@ This repository houses my personal Counter-Strike 2 configurations, autoexec, an
 
 ## 📂 Repository Structure  
 ```bash
-cs2-configs/  
-├── autoexec.cfg           # Main autoexec configuration  
-├── null_binds.cfg         # nullbinds SOCD workaround for Valve Server  
-├── movement/              # desubtick movement  
-│   ├── ####  
-│   ├── ####  
-│   └── ####  
-├── -jump.cfg
-└── +jump.cfg       
+cs2-configs/
+├── AUTOEXEC+NULLBINDS-v1/   # current config (start here)
+│   ├── autoexec.cfg
+│   └── core/                # modular includes (keys, movement, viewmodel, weapons, hud, crosshair...)
+└── old-configs/              # previous/legacy configs, kept for reference
+    ├── autoexec.cfg
+    ├── null_binds.cfg
+    ├── movement/
+    ├── -jump.cfg
+    └── +jump.cfg
   ```
 
 ## ⚡ Autoexec Features  
