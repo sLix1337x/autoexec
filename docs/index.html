@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CS2 Advanced Config — Docs</title>
+<style>
+  :root{
+    --bg:#0e1013; --panel:#161a1f; --panel2:#1c2127; --border:#2a3038;
+    --text:#e7ebf0; --muted:#8b95a3; --accent:#ff8c1a; --accent2:#25c9ff;
+    --mono: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--text); font-family:var(--sans);
+    line-height:1.55; -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent2); text-decoration:none}
+  a:hover{text-decoration:underline}
+  code, .kbd{font-family:var(--mono)}
+  .kbd{
+    display:inline-block; padding:.12em .5em; border-radius:5px;
+    background:var(--panel2); border:1px solid var(--border); font-size:.85em;
+  }
+  code{background:var(--panel2); padding:.1em .4em; border-radius:4px; font-size:.9em}
+  pre{
+    background:var(--panel2); border:1px solid var(--border); border-radius:8px;
+    padding:14px 16px; overflow-x:auto; font-size:.85em; line-height:1.6;
+  }
+  pre code{background:none; padding:0}
+
+  header.hero{
+    padding:64px 24px 40px; text-align:center;
+    background:
+      radial-gradient(600px 300px at 50% -10%, rgba(255,140,26,.15), transparent 70%),
+      var(--bg);
+    border-bottom:1px solid var(--border);
+  }
+  header.hero h1{
+    font-size:2.2rem; margin:0 0 8px; letter-spacing:.5px;
+  }
+  header.hero .accent{color:var(--accent)}
+  header.hero p{color:var(--muted); max-width:640px; margin:0 auto 20px}
+  .hero-links{display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
+  .btn{
+    display:inline-block; padding:9px 18px; border-radius:8px; font-weight:600;
+    font-size:.9rem; border:1px solid var(--border); color:var(--text);
+  }
+  .btn:hover{text-decoration:none; border-color:var(--accent)}
+  .btn.primary{background:var(--accent); border-color:var(--accent); color:#1a1200}
+  .btn.primary:hover{background:#ff9c3d}
+
+  nav.toc{
+    max-width:1040px; margin:28px auto 0; padding:0 24px;
+    display:flex; gap:6px 18px; flex-wrap:wrap; justify-content:center;
+    font-size:.85rem;
+  }
+  nav.toc a{color:var(--muted)}
+  nav.toc a:hover{color:var(--accent2)}
+
+  main{max-width:1040px; margin:0 auto; padding:40px 24px 100px}
+  section{margin-bottom:56px; scroll-margin-top:20px}
+  section h2{
+    font-size:1.4rem; border-bottom:1px solid var(--border); padding-bottom:10px;
+    margin-bottom:18px; display:flex; align-items:center; gap:10px;
+  }
+  section h2 .n{color:var(--accent); font-family:var(--mono); font-size:.85em}
+  section h3{font-size:1.05rem; margin:22px 0 10px; color:var(--accent2)}
+  p{color:#c7cdd6}
+  .muted{color:var(--muted)}
+
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px}
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:16px 18px;
+  }
+  .card h4{margin:0 0 8px; font-size:.95rem; color:var(--text)}
+  .card p{margin:0; font-size:.88rem; color:var(--muted)}
+
+  table{width:100%; border-collapse:collapse; font-size:.88rem}
+  th,td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--border)}
+  th{color:var(--muted); font-weight:600; font-size:.8rem; text-transform:uppercase; letter-spacing:.04em}
+  td .kbd{margin-right:2px}
+  tr:hover td{background:rgba(255,255,255,.02)}
+
+  .keypad-map{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:8px; max-width:420px;
+  }
+  .keypad-map .cell{
+    background:var(--panel); border:1px solid var(--border); border-radius:8px;
+    padding:10px; font-size:.78rem;
+  }
+  .keypad-map .cell b{display:block; color:var(--accent2); font-family:var(--mono); margin-bottom:4px}
+  .keypad-map .cell.panic{grid-column:1/3; background:#2a1414; border-color:#5a2323}
+  .keypad-map .cell.panic b{color:#ff6b6b}
+
+  .modes{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px}
+  .mode-card{border-radius:10px; padding:16px; border:1px solid var(--border)}
+  .mode-card.null{background:linear-gradient(180deg, rgba(37,153,255,.08), transparent)}
+  .mode-card.strict{background:linear-gradient(180deg, rgba(168,85,247,.10), transparent)}
+  .mode-card.raw{background:linear-gradient(180deg, rgba(255,209,102,.10), transparent)}
+  .mode-card .dot{width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:8px}
+  .mode-card.null .dot{background:#3fa9ff}
+  .mode-card.strict .dot{background:#a855f7}
+  .mode-card.raw .dot{background:#ffd166}
+  .mode-card h4{margin:0 0 6px; font-size:1rem}
+  .mode-card p{font-size:.85rem; margin:6px 0 0}
+
+  footer{
+    border-top:1px solid var(--border); text-align:center; padding:30px 24px;
+    color:var(--muted); font-size:.85rem;
+  }
+
+  ::selection{background:rgba(255,140,26,.35)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>CS2 <span class="accent">Advanced Config</span></h1>
+  <p>A modular autoexec for Counter-Strike 2 — tuned settings, null-bind movement with three switchable modes, and every key routed through named verbs instead of hardcoded binds.</p>
+  <div class="hero-links">
+    <a class="btn primary" href="https://github.com/sLix1337x/autoexec/tree/main/CS2%20Advanced%20Config">Get the config</a>
+    <a class="btn" href="https://github.com/sLix1337x/autoexec">Repository</a>
+  </div>
+  <nav class="toc">
+    <a href="#install">Install</a>
+    <a href="#structure">Structure</a>
+    <a href="#movement">Movement</a>
+    <a href="#keys">Key map</a>
+    <a href="#crosshair">Crosshair</a>
+    <a href="#viewmodel">Viewmodel</a>
+    <a href="#hud">HUD</a>
+    <a href="#troubleshooting">Troubleshooting</a>
+  </nav>
+</header>
+
+<main>
+
+<section id="install">
+  <h2><span class="n">01</span> Install</h2>
+  <ol>
+    <li>Download the <code>CS2 Advanced Config</code> folder from the repo.</li>
+    <li>Copy its contents into
+      <pre><code>...\Counter-Strike Global Offensive\game\csgo\cfg\</code></pre>
+      so that <code>autoexec.cfg</code> and the <code>core\</code> folder sit directly in <code>cfg\</code>.
+    </li>
+    <li>Launch CS2. In the developer console, run:
+      <pre><code>exec autoexec</code></pre>
+      or add <code>+exec autoexec.cfg</code> to your launch options to load it every start.
+    </li>
+    <li>Watch the console for the <strong>CONFIGURATION LOADED SUCCESSFULLY</strong> banner. If it doesn't show, see <a href="#troubleshooting">Troubleshooting</a>.</li>
+  </ol>
+  <div class="card">
+    <h4>Recommended launch options</h4>
+    <p><code>-threads 9 -noreflex</code> — adjust thread count to your CPU's core count.</p>
+  </div>
+</section>
+
+<section id="structure">
+  <h2><span class="n">02</span> Structure</h2>
+  <p>The config is split by responsibility so any one piece can be read, changed, or diagnosed on its own.</p>
+  <pre><code>CS2 Advanced Config/
+├── autoexec.cfg              settings only — mouse, HUD, crosshair defaults,
+│                              viewmodel, audio, network, performance
+└── core/
+    ├── load.cfg               the ONLY place that defines load order
+    ├── reg.cfg                the verb layer: +slx_* aliases every key binds to
+    ├── keys.cfg                every bind — points at verbs, never at raw game commands
+    ├── diag.cfg                exec core/diag — finds which layer failed to load
+    ├── help.cfg                exec core/help — prints the key map (bound to F11)
+    └── modules/
+        ├── movement.cfg        null-bind state machine, 3 modes
+        ├── hud.cfg              radar boost, movement-mode HUD colour
+        ├── crosshair.cfg        7 presets on a shared cycle key
+        ├── viewmodel.cfg        8 positions on a shared cycle key
+        └── weapons.cfg          fast bomb/gun drop, knife quickswitch
+</code></pre>
+  <p class="muted">Binds never call a game command directly — they call a <code>+slx_*</code> verb declared once in <code>reg.cfg</code>. Change what a verb does in one place and every key bound to it follows.</p>
+</section>
+
+<section id="movement">
+  <h2><span class="n">03</span> Movement &amp; null-binds</h2>
+  <p>SOCD (opposite keys held at once) is resolved by a small state machine per axis instead of leaving it to CS2's own key handling. Three modes are one press apart on <span class="kbd">KP_4</span>:</p>
+  <div class="modes">
+    <div class="mode-card null">
+      <h4><span class="dot"></span>Null</h4>
+      <p>Holding both A+D (or W+S) locks the axis at neutral — no movement on that axis until one key is released. The standard competitive null-bind behaviour.</p>
+    </div>
+    <div class="mode-card strict">
+      <h4><span class="dot"></span>Strict</h4>
+      <p>Releasing either key of an opposing pair returns straight to neutral, rather than resuming movement in the direction of the key still held.</p>
+    </div>
+    <div class="mode-card raw">
+      <h4><span class="dot"></span>Raw</h4>
+      <p>Reproduces stock CS2: both keys held is a dead stop, same as vanilla binds. Included as a clean fallback / A-B reference.</p>
+    </div>
+  </div>
+  <p style="margin-top:14px"><span class="kbd">KP_5</span> is the master switch — null-binds entirely on/off, dropping straight back to stock <code>+forward</code>/<code>+left</code>/<code>+back</code>/<code>+right</code> binds when off.</p>
+  <p>Movement mode is mirrored on the HUD accent colour (toggle with <span class="kbd">KP_1</span>): <span style="color:#3fa9ff">light blue = null</span>, <span style="color:#a855f7">purple = strict</span>, <span style="color:#ffd166">yellow = raw</span>, grey = off.</p>
+</section>
+
+<section id="keys">
+  <h2><span class="n">04</span> Key map</h2>
+  <p>Press <span class="kbd">F11</span> in-game to print this map to console at any time.</p>
+
+  <h3>Keypad</h3>
+  <div class="keypad-map">
+    <div class="cell"><b>KP_7</b>crosshair cycle</div>
+    <div class="cell"><b>KP_8</b>crosshair → dot</div>
+    <div class="cell"><b>KP_9</b>crosshair outline</div>
+    <div class="cell"><b>KP_4</b>movement mode cycle</div>
+    <div class="cell"><b>KP_5</b>movement on/off</div>
+    <div class="cell"><b>KP_6</b>quickswitch (hold)</div>
+    <div class="cell"><b>KP_1</b>HUD mode-colour toggle</div>
+    <div class="cell"><b>KP_2</b>—</div>
+    <div class="cell"><b>KP_3</b>—</div>
+    <div class="cell panic"><b>KP_0</b>PANIC — clears one stuck input per press (axis, jump, duck, sprint, use). Mash it.</div>
+  </div>
+
+  <h3>Everything else</h3>
+  <table>
+    <thead><tr><th>Key</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><span class="kbd">W A S D</span></td><td>movement, routed through the null-bind verbs</td></tr>
+      <tr><td><span class="kbd">Space</span></td><td>jump</td></tr>
+      <tr><td><span class="kbd">Ctrl</span></td><td>duck</td></tr>
+      <tr><td><span class="kbd">Mouse Wheel Down</span></td><td>jump</td></tr>
+      <tr><td><span class="kbd">Mouse Wheel Up</span></td><td>next weapon</td></tr>
+      <tr><td><span class="kbd">Mouse1 / Mouse2</span></td><td>attack / attack2 (unchanged, straight to the engine)</td></tr>
+      <tr><td><span class="kbd">E</span></td><td>use</td></tr>
+      <tr><td><span class="kbd">5</span></td><td>drop secondary</td></tr>
+      <tr><td><span class="kbd">`</span> (scancode53)</td><td>fast bomb drop</td></tr>
+      <tr><td><span class="kbd">Z X C V</span></td><td>decoy / smoke / HE / molotov</td></tr>
+      <tr><td><span class="kbd">Mouse5</span></td><td>flashbang</td></tr>
+      <tr><td><span class="kbd">N</span></td><td>radar zoom step</td></tr>
+      <tr><td><span class="kbd">M</span> (hold)</td><td>radar zoom out</td></tr>
+      <tr><td><span class="kbd">Left Arrow</span></td><td>toggle crosshair colour</td></tr>
+      <tr><td><span class="kbd">F7</span></td><td>cycle viewmodel position</td></tr>
+      <tr><td><span class="kbd">F11</span></td><td>print key map</td></tr>
+      <tr><td><span class="kbd">Up / Down Arrow</span></td><td>volume 1 / 0.1</td></tr>
+      <tr><td><span class="kbd">F3</span></td><td>voice on/off</td></tr>
+      <tr><td><span class="kbd">Mouse4</span></td><td>push to talk</td></tr>
+      <tr><td><span class="kbd">J</span></td><td>sensitivity 0.64 (1600 DPI)</td></tr>
+      <tr><td><span class="kbd">Tab</span></td><td>team menu</td></tr>
+      <tr><td><span class="kbd">F4</span></td><td>toggle console</td></tr>
+      <tr><td><span class="kbd">F9</span></td><td>dump server tick timing to console</td></tr>
+      <tr><td><span class="kbd">H</span></td><td>switch hands (native CS2 toggle)</td></tr>
+      <tr><td><span class="kbd">F</span></td><td>inspect weapon</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="crosshair">
+  <h2><span class="n">05</span> Crosshair presets</h2>
+  <p><span class="kbd">KP_7</span> cycles all seven, <span class="kbd">KP_8</span> jumps straight to the dot, <span class="kbd">KP_9</span> steps the outline through off → thick → thin, <span class="kbd">Left Arrow</span> toggles colour between white and yellow.</p>
+  <div class="grid">
+    <div class="card"><h4>1 · Big cross</h4><p>size 4.0, no outline, no dot</p></div>
+    <div class="card"><h4>2 · Dot <span class="muted">(default)</span></h4><p>gap -5, thickness 0.9, outlined</p></div>
+    <div class="card"><h4>3 · Thin cross</h4><p>thickness 0.1, tight gap</p></div>
+    <div class="card"><h4>4 · Wide gap</h4><p>size 6.0, gap 3.0</p></div>
+    <div class="card"><h4>5 · Classic</h4><p>size 3.5, gap -1.8</p></div>
+    <div class="card"><h4>6 · Tiny</h4><p>size 1.0, gap -4</p></div>
+    <div class="card"><h4>7 · Small</h4><p>size 1.6, outlined</p></div>
+  </div>
+</section>
+
+<section id="viewmodel">
+  <h2><span class="n">06</span> Viewmodel positions</h2>
+  <p><span class="kbd">F7</span> cycles through all eight. FOV is fixed at 68 across every position.</p>
+  <table>
+    <thead><tr><th>#</th><th>Name</th><th>Feel</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Centre</td><td>default — x 0.5, y 0.5, z -2.0</td></tr>
+      <tr><td>2</td><td>Tuck</td><td>near, pulled back</td></tr>
+      <tr><td>3</td><td>Lift</td><td>near, forward</td></tr>
+      <tr><td>4</td><td>Low</td><td>right, pulled back</td></tr>
+      <tr><td>5</td><td>Right</td><td>right, raised</td></tr>
+      <tr><td>6</td><td>Far</td><td>right, centred</td></tr>
+      <tr><td>7</td><td>High</td><td>far right, forward</td></tr>
+      <tr><td>8</td><td>Deep</td><td>far right, pulled back</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="hud">
+  <h2><span class="n">07</span> HUD &amp; feel</h2>
+  <div class="grid">
+    <div class="card"><h4>Movement-mode colour</h4><p>HUD accent repaints on every mode change: blue (null), purple (strict), yellow (raw), grey (off). Toggle with <span class="kbd">KP_1</span> — turning it back on catches up on the next mode change, it doesn't repaint instantly.</p></div>
+    <div class="card"><h4>Radar boost</h4><p>Hold <span class="kbd">M</span> to zoom the radar out (0.70), release to snap back to the tight default (0.35).</p></div>
+    <div class="card"><h4>Prediction off</h4><p>Body/head-shot FX, ragdolls, weapon drop and bomb defusal all wait for server confirmation rather than playing client-side early.</p></div>
+    <div class="card"><h4>Performance</h4><p><code>fps_max 500</code>, death cam skipped, tutorial pop-ups and tracers off.</p></div>
+  </div>
+</section>
+
+<section id="troubleshooting">
+  <h2><span class="n">08</span> Troubleshooting</h2>
+  <div class="grid">
+    <div class="card">
+      <h4>Movement feels stuck</h4>
+      <p>Tap <span class="kbd">KP_0</span> repeatedly — each press clears one latched input (strafe axis, forward axis, jump, duck, sprint, use). Six presses covers all of them.</p>
+    </div>
+    <div class="card">
+      <h4>Config didn't load</h4>
+      <p>Open console and run <code>exec core/diag</code>. It calls a marker in every layer in load order — the first <code>Unknown command: v_&lt;name&gt;</code> names the file that never ran; everything after it is meaningless.</p>
+    </div>
+    <div class="card">
+      <h4>Total reset</h4>
+      <p>In console: <code>bind w +forward; bind a +left; bind s +back; bind d +right</code> restores plain stock movement regardless of what state the config is in.</p>
+    </div>
+    <div class="card">
+      <h4>Nothing happens on a keypad key</h4>
+      <p>Check <code>bind_list</code> hasn't been overwritten by another config loaded after this one — <code>keys.cfg</code> must run last.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  CS2 Advanced Config · <a href="https://github.com/sLix1337x/autoexec">sLix1337x/autoexec</a> · MIT licensed
+</footer>
+
+</body>
+</html>
