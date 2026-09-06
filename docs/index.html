@@ -1,0 +1,870 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CS2 Config Docs: autoexec, binds, aliases, convars</title>
+<meta name="description" content="A general reference for Counter-Strike 2 config files: where they live, how autoexec loading works, config syntax, binds, aliases, null-binds, practice commands and a searchable convar list, plus the sLix1337x Advanced Config.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="skip" href="#content">Skip to content</a>
+
+<header class="topbar">
+  <button class="icon-btn" id="menuBtn" aria-label="Open navigation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  <a class="brand" href="index.html"><span class="brand-mark">CS2</span> Config Docs</a>
+  <nav class="topnav">
+    <a href="index.html" aria-current="page">Reference</a>
+    <a href="scancodes.html">Scancodes</a>
+    <a href="dead-commands.html">Dead commands</a>
+  </nav>
+  <span class="spacer"></span>
+  <button class="searchbtn" id="searchBtn" aria-label="Search the docs">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+    <span class="label">Search docs…</span><kbd>Ctrl K</kbd>
+  </button>
+  <a class="icon-btn" href="https://github.com/sLix1337x/autoexec" aria-label="Repository on GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.06-.72.08-.7.08-.7 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.1-.76.4-1.27.74-1.56-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg></a>
+  <button class="icon-btn" id="themeBtn" aria-label="Toggle light or dark theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+</header>
+
+<div class="layout">
+
+<aside class="sidebar" id="sidebar">
+  <details class="nav-group" open>
+    <summary>Part I · Reference</summary>
+    <a href="#ref-basics"><span class="num">01</span>Where configs live</a>
+    <a href="#ref-autoexec"><span class="num">02</span>Autoexec that sticks</a>
+    <a href="#ref-syntax"><span class="num">03</span>Config syntax</a>
+    <a href="#ref-binds"><span class="num">04</span>Binds &amp; key names</a>
+    <a href="#ref-alias"><span class="num">05</span>Aliases &amp; state</a>
+    <a href="#ref-recipes"><span class="num">06</span>Recipes</a>
+    <a href="#ref-cvars"><span class="num">07</span>Convar reference</a>
+    <a href="#ref-practice"><span class="num">08</span>Practice commands</a>
+    <a href="#ref-limits"><span class="num">09</span>Limits &amp; safety</a>
+    <a href="#ref-debug"><span class="num">10</span>Debugging a config</a>
+    <a href="#ref-status"><span class="num">11</span>Verification status</a>
+  </details>
+
+  <details class="nav-group" open>
+    <summary>Part II · This repo's config</summary>
+    <a href="#cfg-install"><span class="num">12</span>Install</a>
+    <a href="#cfg-structure"><span class="num">13</span>Structure</a>
+    <a href="#cfg-movement"><span class="num">14</span>Movement</a>
+    <a href="#cfg-keys"><span class="num">15</span>Key map</a>
+    <a href="#cfg-crosshair"><span class="num">16</span>Crosshair</a>
+    <a href="#cfg-viewmodel"><span class="num">17</span>Viewmodel</a>
+    <a href="#cfg-hud"><span class="num">18</span>HUD &amp; feel</a>
+    <a href="#cfg-troubleshooting"><span class="num">19</span>Troubleshooting</a>
+  </details>
+
+  <details class="nav-group" open>
+    <summary>Other pages</summary>
+    <a href="scancodes.html">Scancode table</a>
+    <a href="dead-commands.html">Dead &amp; blocked commands</a>
+    <a href="https://github.com/sLix1337x/autoexec">Repository</a>
+  </details>
+</aside>
+
+<main id="content">
+
+<div class="page-head">
+  <p class="eyebrow">Counter-Strike 2</p>
+  <h1>Config documentation</h1>
+  <p class="lead">What is actually possible inside a CS2 <code>autoexec.cfg</code>: file layout, load order, syntax, binds, aliases, state machines, practice commands and the convars that matter. Plus the config this repo ships as a worked example.</p>
+  <div class="hero-links">
+    <a class="btn primary" href="#ref-basics">Read the reference</a>
+    <a class="btn" href="#cfg-install">Install this config</a>
+    <a class="btn" href="scancodes.html">Scancodes</a>
+    <a class="btn" href="dead-commands.html">Dead commands</a>
+  </div>
+</div>
+
+<div class="divider">
+  <h2>Part I · General reference</h2>
+  <p>Everything below applies to any CS2 config, not just this one.</p>
+  <p><strong>Every command named on these pages was typed into a live CS2 console and answered.</strong> If it is listed without a badge, the console returned a value or a usage line. Anything still untested carries a <span class="pend">pending</span> badge, and anything that answered <code>Unknown command</code> was moved to <a href="dead-commands.html">dead &amp; blocked commands</a>. The page is incomplete on purpose rather than confidently wrong, and it grows as things get checked.</p>
+</div>
+
+<section id="ref-basics">
+  <h2><span class="n">01</span> Where CS2 configs live</h2>
+  <p>CS2 splits configuration across two different trees, and the split is the source of most "my settings reset" confusion.</p>
+
+  <h3>The install folder: files you write</h3>
+  <pre><code>...\Steam\steamapps\common\Counter-Strike Global Offensive\game\csgo\cfg\</code></pre>
+  <p>This is where <code>autoexec.cfg</code> and any hand-written <code>.cfg</code> goes. <code>exec</code> resolves paths relative to this folder, so <code>exec core/keys</code> loads <code>cfg\core\keys.cfg</code>. Subfolders are fine, the <code>.cfg</code> extension is optional in the command.</p>
+
+  <h3>The userdata folder: files the game writes</h3>
+  <pre><code>...\Steam\userdata\&lt;SteamID3&gt;\730\local\cfg\</code></pre>
+  <table>
+    <tbody>
+      <tr><td><code>cs2_user_convars_0_slot0.vcfg</code></td><td>your saved convars (sensitivity, crosshair, volume, HUD…), anything menu-facing that carries the archive flag</td></tr>
+      <tr><td><code>cs2_user_keys_0_slot0.vcfg</code></td><td>your saved key binds</td></tr>
+      <tr><td><code>cs2_machine_convars.vcfg</code></td><td>machine-wide settings, not tied to the Steam account</td></tr>
+      <tr><td><code>cs2_video.txt</code></td><td>video settings: resolution, aspect, quality presets</td></tr>
+    </tbody>
+  </table>
+  <p>CS2 no longer uses CS:GO's <code>config.cfg</code>. These <code>.vcfg</code> files are written by the game when you change something in the menu and on shutdown; editing them by hand is a losing game.</p>
+
+  <div class="note">
+    <p><strong>Startup order, read out of a real <code>console.log</code>:</strong></p>
+    <pre><code>Saved 'cs2_user_keys.vcfg' to SteamRemoteStorage, 1185 bytes OK
+Saved user config file 'cfg/cs2_user_keys_0_slot0.vcfg'
+Saved user config file 'cfg/cs2_user_convars_0_slot0.vcfg'
+execing autoexec.cfg
+  execing core/load ... your own exec chain
+[later, on map load]
+execing gamemode_competitive.cfg
+execing gamemode_competitive_offline.cfg
+execing server_default.cfg</code></pre>
+    <p>That settles three things. The <code>.vcfg</code> files are written <em>and</em> pushed to Steam Cloud before your config runs; <code>autoexec.cfg</code> then runs and overrides them for the session, which is exactly why a value pinned in autoexec appears to "not save" when you change it in the menu; and the game execs several more configs later, on map load.</p>
+  </div>
+  <p class="muted">Those late ones are usable hooks of their own: <code>gamemode_competitive.cfg</code> runs when a competitive match loads, <code>server_default.cfg</code> when you host. A missing one is not an error: the log says <code>exec: couldn't exec '{*}cfg/gamemode_competitive_server.cfg', unable to read file</code> and moves on.</p>
+
+  <p class="muted">Steam Cloud can also restore an older copy of these files over yours. If configs keep reverting after a restart, disable cloud sync for CS2 in <em>Properties → General</em> and re-check.</p>
+</section>
+
+<section id="ref-autoexec">
+  <h2><span class="n">02</span> An autoexec that actually loads</h2>
+  <ol>
+    <li>Create <code>autoexec.cfg</code> in the install <code>cfg\</code> folder. Save as <em>All files</em> so it doesn't end up <code>autoexec.cfg.txt</code>; plain UTF-8 or ANSI, no BOM needed.</li>
+    <li>One command per line. Console-style chaining with <code>;</code> works, but line-per-command is what you want to read at 2am.</li>
+    <li>Nothing else is required. CS2 execs <code>autoexec.cfg</code> from that folder at startup on its own, verified on a client whose only launch option was <code>-condebug</code> and whose log still shows <code>execing autoexec.cfg</code>. To re-run it mid-session, type <code>exec autoexec</code>.</li>
+    <li>End the file with a marker so you can see it ran:
+      <pre><code>echo "=== autoexec loaded ==="</code></pre>
+      Open the console after launch and look for the line. <code>echo</code> output does <em>not</em> reach <code>console.log</code> even with <code>-condebug</code>, but the <code>execing autoexec.cfg</code> trace does, which answers the same question.</li>
+  </ol>
+  <div class="note">
+    <p><strong><code>+exec autoexec</code> is a fallback, not a requirement.</strong> Most guides present it as mandatory; a client with no <code>+exec</code> at all still execs the file. Add it only if your marker never appears; then it forces the exec explicitly. The flag actually worth having is a different one, <code>-condebug</code>, which writes everything the console prints to <code>game\csgo\console.log</code> and makes all of this debuggable at all.</p>
+  </div>
+
+  <h3>Splitting a config across files</h3>
+  <p>Anything past a few dozen lines is easier as one loader plus modules:</p>
+  <pre><code>// autoexec.cfg
+exec cfg/settings      // convars only
+exec cfg/aliases       // behaviour
+exec cfg/binds         // keys last, so nothing overwrites them</code></pre>
+  <p>Order matters: aliases must exist before a bind points at them, and binds should run last so a later file can't silently steal a key.</p>
+
+  <div class="warn">
+    <p><strong>Read-only is a trap.</strong> Marking <code>autoexec.cfg</code> read-only is harmless, but marking the <code>.vcfg</code> files read-only to "lock" settings stops the game writing anything, including new settings you actually want, and it breaks after updates that rename convars. Use autoexec to pin values instead.</p>
+  </div>
+</section>
+
+<section id="ref-syntax">
+  <h2><span class="n">03</span> Config syntax</h2>
+  <table>
+    <thead><tr><th>Form</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><code>cvar value</code></td><td>set a convar. Quotes optional for simple values, required if the value contains spaces</td></tr>
+      <tr><td><code>cvar</code></td><td>alone in the console prints its current value, as in <code>cl_crosshairgap = -5</code>. A <em>command</em> typed bare prints its usage line instead, and a name that doesn't exist prints <code>Unknown command</code></td></tr>
+      <tr><td><code>// text</code></td><td>comment to end of line. There is no block comment</td></tr>
+      <tr><td><code>a; b; c</code></td><td>command separator, the whole line runs in order</td></tr>
+      <tr><td><code>"a; b"</code></td><td>quoted compound, used as the body of a bind or alias</td></tr>
+      <tr><td><code>exec file</code></td><td>run another cfg, path relative to <code>cfg\</code>, extension optional</td></tr>
+      <tr><td><code>echo text</code></td><td>print a simple marker or message to the console while debugging</td></tr>
+      <tr><td><code>toggle varName [values…]</code></td><td>step a convar through a list of values. Usage: <em>"toggle varName [... optional list of valid values to cycle]"</em></td></tr>
+      <tr><td><code>incrementvar varName min max delta</code></td><td>step a numeric convar, wrapping at the ends. Negative delta counts down</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <p><strong>Quoting rule of thumb:</strong> one level of quotes per level of nesting is all the parser reliably gives you. <code>bind x "alias_name"</code> is fine; deeply nested quotes inside a bind inside an alias is where configs break. Push the complexity into a named alias instead of nesting.</p>
+  </div>
+
+  <h3>Semicolons and the console</h3>
+  <p>A line pasted into the console and the same line in a cfg behave identically, with one exception: the console only takes one line, so a multi-line block has to become a <code>;</code> chain or an <code>exec</code>. This is why "run it in console to test, then paste into the cfg" is the fastest way to iterate.</p>
+</section>
+
+<section id="ref-binds">
+  <h2><span class="n">04</span> Binds &amp; key names</h2>
+  <table>
+    <thead><tr><th>Command</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td><code>bind KEY "command"</code></td><td>bind a key. Rebinding a key replaces the previous bind silently</td></tr>
+      <tr><td><code>unbind KEY</code></td><td>clear one key</td></tr>
+      <tr><td><code>unbindall</code><span class="pend">pending</span></td><td>clear everything, including menu, console and scoreboard. Only useful as the first line of a config that re-binds every key it needs</td></tr>
+      <tr><td><code>key_findbinding &lt;substring&gt;</code></td><td>print the keys whose bind contains that substring. The substring is required; bare, it only prints its usage line</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Key names</h3>
+  <table>
+    <thead><tr><th>Group</th><th>Names</th></tr></thead>
+    <tbody>
+      <tr><td>Letters / digits</td><td><code>a</code>–<code>z</code>, <code>0</code>–<code>9</code> (top row)</td></tr>
+      <tr><td>Function</td><td><code>F1</code>–<code>F12</code></td></tr>
+      <tr><td>Modifiers</td><td><code>SHIFT</code>, <code>CTRL</code>, <code>ALT</code>, <code>SPACE</code>, <code>TAB</code>, <code>ENTER</code>, <code>CAPSLOCK</code>, <code>BACKSPACE</code></td></tr>
+      <tr><td>Navigation</td><td><code>INS</code>, <code>DEL</code>, <code>HOME</code>, <code>END</code>, <code>PGUP</code>, <code>PGDN</code>, <code>UPARROW</code>, <code>DOWNARROW</code>, <code>LEFTARROW</code>, <code>RIGHTARROW</code></td></tr>
+      <tr><td>Numpad</td><td><code>KP_0</code>–<code>KP_9</code>, <code>KP_ENTER</code>, <code>KP_PLUS</code>, <code>KP_MINUS</code>, <code>KP_MULTIPLY</code>, <code>KP_SLASH</code>, <code>KP_DEL</code></td></tr>
+      <tr><td>Mouse</td><td><code>MOUSE1</code>–<code>MOUSE5</code>, <code>MWHEELUP</code>, <code>MWHEELDOWN</code></td></tr>
+      <tr><td>Punctuation</td><td><code>SEMICOLON</code>, <code>COMMA</code>, <code>PERIOD</code>, <code>SLASH</code>, <code>BACKSLASH</code>, <code>MINUS</code>, <code>EQUAL</code>, <code>LBRACKET</code>, <code>RBRACKET</code>, <code>'</code>, <code>`</code></td></tr>
+      <tr><td>Scancodes</td><td><code>scancode1</code>, <code>scancode53</code> and so on: position-based, layout independent</td></tr>
+    </tbody>
+  </table>
+  <p class="muted">Scancode binds are the fix for non-US layouts: <code>bind scancode53 …</code> hits the physical key left of <kbd>1</kbd> no matter what character your layout prints there. To find any key's number, bind it by name and read the line CS2 echoes back:</p>
+  <pre><code>&gt; bind w +forward
+Interpreting bind command as:
+    bind scancode26 "+forward" // US English key name "w"</code></pre>
+  <p class="muted">Full list on the <a href="scancodes.html">scancode table</a> page.</p>
+
+  <h3>Hold vs press</h3>
+  <p>Commands starting with <code>+</code> are hold commands: pressing the key fires <code>+x</code>, releasing fires <code>-x</code> automatically. That pairing is the whole basis of movement scripts.</p>
+  <pre><code>bind mouse1 "+attack"           // held while the button is down
+bind space  "+jump"
+bind mwheeldown "+jump"          // press and release both fire on one scroll tick</code></pre>
+  <p>Mouse wheel is a special case: a scroll produces a press <em>and</em> release in the same instant, which is why it works for bhop but not for anything needing a real hold.</p>
+</section>
+
+<section id="ref-alias">
+  <h2><span class="n">05</span> Aliases, toggles and state</h2>
+  <p><code>alias name "commands"</code> defines a named command. Aliases are where a config stops being a settings list and starts being a small program.</p>
+
+  <h3>Indirection layer</h3>
+  <pre><code>alias drop_bomb "slot5; drop; slot1"
+bind g drop_bomb</code></pre>
+  <p>Bind keys to verbs, never to raw commands. Change the verb once and every key bound to it follows, and you can rebind a key without re-reading what it did.</p>
+
+  <h3>Hold aliases</h3>
+  <pre><code>alias +quickswitch "slot3"
+alias -quickswitch "lastinv"
+bind kp_6 +quickswitch</code></pre>
+  <p>A <code>+</code>/<code>-</code> alias pair turns any key into a hold action: knife out while held, previous weapon on release.</p>
+
+  <h3>The flip-flop, a two-state toggle</h3>
+  <pre><code>alias radar_toggle radar_big
+alias radar_big   "cl_hud_radar_scale 1.30; alias radar_toggle radar_small"
+alias radar_small "cl_hud_radar_scale 0.80; alias radar_toggle radar_big"
+bind n radar_toggle</code></pre>
+  <p>An alias that redefines itself is the standard CS toggle. Each call does its work and rewrites the entry point to point at the other half. Extend the chain and you get a cycle of any length: seven crosshair presets, eight viewmodel positions, three movement modes are all this pattern.</p>
+
+  <h3>Cheaper cycles</h3>
+  <pre><code>bind kp_7 "incrementvar cl_crosshairsize 1 6 1"   // step and wrap
+bind kp_8 "toggle cl_crosshairdot 0 1"           // step through a value list</code></pre>
+  <p>If the state is a single convar, <code>toggle</code>/<code>incrementvar</code> replaces the whole alias chain. Use aliases only when a step has to change several things at once.</p>
+
+  <h3>State machines with exec</h3>
+  <p>Aliases can be redefined by an <code>exec</code>, so a folder of tiny cfg files becomes a state machine: each file sets the aliases for one state and defines how to enter the next. This is how null-bind configs keep per-axis state without any real variables, and how the movement module in this repo works.</p>
+
+  <div class="warn">
+    <p><strong>Aliases do not persist.</strong> They live only in the current session. Anything you define must be defined again by autoexec on every launch. Nothing is written to the <code>.vcfg</code> files.</p>
+  </div>
+</section>
+
+<section id="ref-recipes">
+  <h2><span class="n">06</span> Recipes</h2>
+
+  <h3>Null-binds / SOCD</h3>
+  <p>"Opposite key priority": when A and D are both held, decide what happens instead of letting the last input win. Each direction gets a wrapper that remembers whether its opposite is down.</p>
+  <pre><code>alias +mfwd "-back; +forward; alias checkfwd +forward"
+alias -mfwd "-forward; checkback;  alias checkfwd none"
+alias +mback "-forward; +back; alias checkback +back"
+alias -mback "-back; checkfwd;   alias checkback none"
+alias checkfwd  none
+alias checkback none
+alias none ""
+bind w +mfwd
+bind s +mback</code></pre>
+  <p>Same shape for A/D. Three behaviours: <em>null</em> (both held = stand still), <em>last-input-wins</em> (the newest key moves you), and <em>raw</em> (stock engine behaviour). Valve has left these working; SOCD handling at hardware level is what gets banned in tournaments, not the cfg version.</p>
+
+  <h3>Jump throw</h3>
+  <pre><code>alias +jumpthrow "+jump; -attack; -attack2"
+alias -jumpthrow "-jump"
+bind t +jumpthrow</code></pre>
+  <p>Still functions, but CS2's subtick input makes it far less deterministic than the CS:GO version, and several leagues ban multi-action binds. Grenade lineups are the same on any server since subtick removed tick-rate variance.</p>
+
+  <h3>Fast drop / bomb drop</h3>
+  <pre><code>alias dropbomb "slot5; drop; slot1"
+bind ` dropbomb</code></pre>
+
+  <h3>Hold to zoom the radar out</h3>
+  <pre><code>alias +radar "cl_hud_radar_scale 0.70"
+alias -radar "cl_hud_radar_scale 0.35"
+bind m +radar</code></pre>
+
+  <h3>Step a convar instead of scripting it</h3>
+  <pre><code>bind n "incrementvar cl_radar_scale 0 1 0.25"</code></pre>
+  <p>Four radar zoom levels on one key, no aliases at all.</p>
+
+  <h3>Clutch mute</h3>
+  <pre><code>alias clutch_toggle clutch_on
+alias clutch_on  "voice_modenable 0; alias clutch_toggle clutch_off; echo [MUTED]"
+alias clutch_off "voice_modenable 1; alias clutch_toggle clutch_on;  echo [UNMUTED]"
+bind f8 clutch_toggle</code></pre>
+  <p>Every guide writes this with <code>voice_enable</code>, which does not exist in CS2. <code>voice_modenable</code> does.</p>
+
+  <div class="warn">
+    <p><strong>Two things you cannot script here.</strong> There is no <code>buy</code> console command: buy binds are not a thing in CS2, the buy menu is the interface. And the "display damage" console filter is gone with the whole <code>con_filter_*</code> family. See <a href="dead-commands.html">dead &amp; blocked commands</a>.</p>
+  </div>
+</section>
+
+<section id="ref-cvars">
+  <h2><span class="n">07</span> Convar reference</h2>
+  <p class="lead">The convars worth putting in a config, grouped by what they touch. Defaults and limits below are the ones <code>help</code> reports; "no limits" means the convar declares none, not that the check was skipped.</p>
+
+  <h3>Reading <code>help</code> output</h3>
+  <p><code>help &lt;name&gt;</code> is the authority on all of this, and it answers in a single line:</p>
+  <pre><code>help viewmodel_fov
+viewmodel_fov = 68 (default 60, min 60, max 68) [client archive userinfo per_user] - Viewmodel FOV</code></pre>
+  <p>Current value, then defaults and limits in parentheses (empty parentheses mean none are declared), then flags in brackets, then the description. The flags are the part to learn:</p>
+  <table class="cmdtable">
+    <thead><tr><th>Flag</th><th>What it means for a config</th></tr></thead>
+    <tbody>
+      <tr><td><code>archive</code></td><td>saved to the <code>.vcfg</code> files and restored on launch</td></tr>
+      <tr><td><code>per_user</code></td><td>stored against the Steam account rather than the machine</td></tr>
+      <tr><td><code>userinfo</code></td><td>sent to the server as part of client info</td></tr>
+      <tr><td><code>cheat</code></td><td>needs <code>sv_cheats 1</code>, so it only applies on a server you control</td></tr>
+      <tr><td><code>replicated</code></td><td>the server dictates it; a config value is ignored in a match</td></tr>
+      <tr><td><code>notify</code></td><td>changing it announces itself to players</td></tr>
+      <tr><td><code>client</code> / <code>game</code></td><td>which side owns it</td></tr>
+    </tbody>
+  </table>
+  <p class="muted">This is how to tell in advance whether a line will do anything on an official server. <code>cl_showpos</code>, for instance, is flagged <code>cheat</code>, so it is not a HUD option you can switch on in matchmaking.</p>
+  <input class="filter" id="cvarFilter" type="text" placeholder="filter: crosshair, radar, snd, viewmodel" aria-label="Filter convars">
+  <p class="filter-hint">Filters every table in this section by name or description.</p>
+
+  <h3>Mouse &amp; sensitivity</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Convar</th><th>Range</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code>sensitivity</code></td><td>default 1.25 · 0.0001–8</td><td>mouse sensitivity multiplier</td></tr>
+      <tr><td><code>zoom_sensitivity_ratio</code></td><td>0.01–3</td><td>extra scale applied while zoomed in</td></tr>
+      <tr><td><code>m_yaw</code></td><td>default 0.022 · no limits</td><td>mouse yaw factor. Changing it rescales every sensitivity you know</td></tr>
+      <tr><td><code>m_pitch</code></td><td>default 0.022 · no limits</td><td>mouse pitch factor. Negative inverts</td></tr>
+    </tbody>
+  </table>
+  <p class="muted"><code>m_rawinput</code>, <code>m_customaccel</code>, <code>cl_mouselook</code> and <code>zoom_sensitivity_ratio_mouse</code> all answer <code>Unknown command</code>. See <a href="dead-commands.html#gone">dead commands</a>. Any mouse config still carrying them is a CS:GO config.</p>
+
+  <h3>Crosshair</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Convar</th><th>Range</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code>cl_crosshairstyle</code></td><td>default 2</td><td>only three of the five values do anything. <strong>2</strong> accurate recoil/spread feedback with a fixed inner part · <strong>4</strong> default static · <strong>5</strong> legacy, fake recoil and inaccurate feedback. The game labels 0, 1 and 3 DISABLED</td></tr>
+      <tr><td><code>cl_crosshairsize</code></td><td>default 3.9 · no limits</td><td>length of each arm</td></tr>
+      <tr><td><code>cl_crosshairthickness</code></td><td>default 0.6 · no limits</td><td>arm thickness</td></tr>
+      <tr><td><code>cl_crosshairgap</code></td><td>default -2.2 · no limits</td><td>centre gap. Negative pulls the arms in</td></tr>
+      <tr><td><code>cl_crosshairdot</code></td><td>true/false</td><td>centre dot</td></tr>
+      <tr><td><code>cl_crosshair_t</code></td><td>true/false</td><td>drop the top arm, giving a T shape</td></tr>
+      <tr><td><code>cl_crosshair_drawoutline</code></td><td>true/false</td><td>outline</td></tr>
+      <tr><td><code>cl_crosshair_outlinethickness</code></td><td>0–3</td><td>outline width</td></tr>
+      <tr><td><code>cl_crosshaircolor</code></td><td>no limits</td><td>colour from the set defined in <code>game_options.consoles.txt</code>; the <code>_r</code>/<code>_g</code>/<code>_b</code> convars supply a custom one</td></tr>
+      <tr><td><code>cl_crosshaircolor_r / _g / _b</code></td><td>0–255</td><td>custom colour channels</td></tr>
+      <tr><td><code>cl_crosshairalpha</code></td><td>default 200 · 0–255</td><td>opacity, with <code>cl_crosshairusealpha</code> on</td></tr>
+      <tr><td><code>cl_crosshairusealpha</code></td><td>true/false</td><td>lets <code>cl_crosshairalpha</code> apply at all</td></tr>
+      <tr><td><code>cl_crosshair_recoil</code></td><td>true/false</td><td>crosshair follows the recoil pattern</td></tr>
+      <tr><td><code>cl_crosshairgap_useweaponvalue</code></td><td>true/false</td><td>let each weapon set its own gap</td></tr>
+      <tr><td><code>cl_crosshair_friendly_warning</code></td><td>numeric</td><td>mark the crosshair when aiming at a teammate</td></tr>
+      <tr><td><code>cl_crosshair_sniper_width</code></td><td>no limits</td><td>above 1, scope cross lines gain extra width; 1 is a single-pixel hairline</td></tr>
+      <tr><td><code>cl_show_observer_crosshair</code></td><td>0–2</td><td>crosshair of the player you spectate: 0 off, 1 friends and party, 2 everyone</td></tr>
+      <tr><td><code>cl_crosshair_dynamic_splitalpha_innermod</code></td><td>numeric</td><td>inner-line alpha for the dynamic crosshair split</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><p>Booleans print as <code>true</code>/<code>false</code> in CS2 rather than 1/0, as in <code>cl_crosshairdot = true</code>, but both forms are accepted when you set them.</p></div>
+
+  <h3>Viewmodel &amp; hands</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Convar</th><th>Range</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code>viewmodel_fov</code></td><td>default 60 · 60–68</td><td>weapon model FOV. The 54 minimum every guide quotes is CS:GO's; 60 is the floor here</td></tr>
+      <tr><td><code>viewmodel_offset_x</code></td><td>default 1 · -2–2.5</td><td>right (+) / left (−). The range is asymmetric</td></tr>
+      <tr><td><code>viewmodel_offset_y</code></td><td>—</td><td>forward (+) / back (−)</td></tr>
+      <tr><td><code>viewmodel_offset_z</code></td><td>—</td><td>up (+) / down (−)</td></tr>
+      <tr><td><code>viewmodel_presetpos</code></td><td>1–2</td><td>1 Desktop, 2 Classic. There is no third preset, whatever the guides say</td></tr>
+      <tr><td><code>cl_prefer_lefthanded</code></td><td>true/false</td><td>preferred hand for weapons with a mirrored model</td></tr>
+      <tr><td><code>switchhands</code></td><td>command</td><td>flip hands now. There is no <code>+switchhands</code> hold form</td></tr>
+    </tbody>
+  </table>
+  <p class="muted"><code>cl_righthand</code> and <code>viewmodel_recoil</code> are gone; the <code>cl_bob*</code> family with them.</p>
+
+  <h3>HUD &amp; radar</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Convar</th><th>Range</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code>cl_hud_color</code></td><td>0–12</td><td>0 team colour · 1 white · 2 bright white · 3 light blue · 4 blue · 5 purple · 6 red · 7 orange · 8 yellow · 9 green · 10 aqua · 11 pink · 12 teammate colour</td></tr>
+      <tr><td><code>hud_scaling</code></td><td>default 1 · 0.9–1.1</td><td>scales HUD elements. The 0.50–0.95 range every guide quotes is CS:GO's</td></tr>
+      <tr><td><code>safezonex</code> / <code>safezoney</code></td><td>default 1 · 0–1</td><td>share of the screen treated as safe from overscan. Width cannot end up smaller than height</td></tr>
+      <tr><td><code>cl_hud_radar_scale</code></td><td>default 1 · 0.8–1.3</td><td>size of the radar widget</td></tr>
+      <tr><td><code>cl_radar_scale</code></td><td>default 0.7 · 0.25–1</td><td>zoom of the map inside the radar</td></tr>
+      <tr><td><code>cl_radar_always_centered</code></td><td>true/false</td><td>off shows the whole map instead of keeping you centred</td></tr>
+      <tr><td><code>cl_radar_rotate</code></td><td>true/false</td><td>off locks the radar north-up</td></tr>
+      <tr><td><code>cl_radar_square_with_scoreboard</code></td><td>true/false</td><td>square radar while the scoreboard is open</td></tr>
+      <tr><td><code>cl_radar_icon_scale_min</code></td><td>numeric</td><td>smallest player icon on the radar</td></tr>
+      <tr><td><code>cl_showloadout</code></td><td>true/false</td><td>keeps the weapon strip visible instead of fading it</td></tr>
+      <tr><td><code>cl_teammate_colors_show</code></td><td>1–2</td><td>1 colours teammates on radar and scoreboard, 2 adds letters</td></tr>
+      <tr><td><code>hud_showtargetid</code></td><td>true/false</td><td>name of the player you are looking at</td></tr>
+      <tr><td><code>cl_showfps</code></td><td>0–4</td><td>1 fps · 2 smoothed fps · 3 server ms · 4 fps plus logging to file</td></tr>
+      <tr><td><code>cl_showpos</code> <span class="pend">cheat</span></td><td>0–2</td><td>position readout, flagged <code>cheat</code>, so it needs <code>sv_cheats</code> and does nothing in matchmaking</td></tr>
+      <tr><td><code>cl_weapon_selection_rarity_color</code></td><td>true/false</td><td>colour the weapon strip by skin rarity</td></tr>
+      <tr><td><code>cl_draw_only_deathnotices</code></td><td>true/false</td><td>strips the HUD to killfeed only, for recording</td></tr>
+      <tr><td><code>cl_teamid_overhead_mode</code></td><td>numeric</td><td>teammate IDs through walls</td></tr>
+    </tbody>
+  </table>
+  <p class="muted"><code>cl_show_team_equipment</code>, <code>cl_hud_healthammo_style</code>, <code>cl_hud_background_alpha</code> and <code>cl_teamid_overhead_always</code> are gone. <code>safezone</code> is gone as a single convar: <code>safezonex</code> and <code>safezoney</code> are what exist.</p>
+
+  <h3>Telemetry, the net graph replacement</h3>
+  <p>Neither <code>net_graph</code> nor the widely-posted <code>cq_netgraph</code> exists. This family is what CS2 actually has, and it is per-metric rather than one graph:</p>
+  <table class="cmdtable">
+    <thead><tr><th>Convar</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code>cl_hud_telemetry_frametime_show</code></td><td>frametime readout on the HUD</td></tr>
+      <tr><td><code>cl_hud_telemetry_frametime_poor</code></td><td>threshold above which frametime is drawn as bad</td></tr>
+      <tr><td><code>cl_hud_telemetry_ping_show</code></td><td>ping readout</td></tr>
+      <tr><td><code>cl_hud_telemetry_ping_poor</code></td><td>threshold above which ping is drawn as bad</td></tr>
+      <tr><td><code>cl_hud_telemetry_net_misdelivery_show</code></td><td>packet loss / misdelivery indicator</td></tr>
+      <tr><td><code>cl_hud_telemetry_serverrecvmargin_graph_show</code></td><td>server receive-margin graph, how early your input reaches the server</td></tr>
+      <tr><td><code>cl_draw_only_deathnotices</code></td><td>strips the HUD to killfeed only, for recording</td></tr>
+    </tbody>
+  </table>
+  <p class="muted">The <code>_net_quality_show</code> and <code>_serverrecvmargin_show</code> variants posted alongside these do <em>not</em> exist. Only the <code>_graph_show</code> form of the latter does.</p>
+
+  <h3>Audio</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Convar</th><th>Range</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code>volume</code></td><td>0–1</td><td>master volume</td></tr>
+      <tr><td><code>snd_mixahead</code></td><td>default 0.001 · no limits</td><td>seconds of audio buffered ahead. Lower = less delay, more crackle risk</td></tr>
+      <tr><td><code>snd_headphone_eq</code></td><td>default 0 · no limits</td><td>headphone EQ preset</td></tr>
+      <tr><td><code>snd_spatialize_lerp</code></td><td>default 0 · no limits</td><td>blend between full HRTF and plain stereo</td></tr>
+      <tr><td><code>snd_menumusic_volume</code></td><td>0–1</td><td>main-menu music</td></tr>
+      <tr><td><code>snd_mute_mvp_music_live_players</code></td><td>true/false</td><td>mute MVP music while players are still alive</td></tr>
+      <tr><td><code>snd_mute_losefocus</code></td><td>true/false</td><td>off keeps audio playing when alt-tabbed</td></tr>
+      <tr><td><code>snd_tensecondwarning_volume</code></td><td>0–1</td><td>bomb ten-second warning</td></tr>
+      <tr><td><code>snd_autodetect_latency</code></td><td>true/false</td><td>let the engine pick the audio device latency</td></tr>
+      <tr><td><code>voice_always_sample_mic</code></td><td>true/false</td><td>keep sampling the mic while not transmitting</td></tr>
+      <tr><td><code>voice_modenable</code></td><td>true/false</td><td>voice on/off, the one a clutch-mute bind needs, not the dead <code>voice_enable</code></td></tr>
+      <tr><td><code>snd_voipvolume</code></td><td>0–1</td><td>incoming voice volume, replaces the dead <code>voice_scale</code></td></tr>
+      <tr><td><code>voice_threshold</code></td><td>numeric</td><td>mic activation threshold</td></tr>
+      <tr><td><code>voice_loopback</code></td><td>true/false</td><td>hear your own mic, for mic testing</td></tr>
+      <tr><td><code>snd_musicvolume</code></td><td>0–1</td><td>music bus volume</td></tr>
+      <tr><td><code>snd_mvp_volume</code></td><td>0–1</td><td>MVP anthem</td></tr>
+      <tr><td><code>snd_roundstart_volume</code> / <code>snd_roundend_volume</code></td><td>0–1</td><td>round start and end stingers</td></tr>
+      <tr><td><code>snd_deathcamera_volume</code></td><td>0–1</td><td>death camera music</td></tr>
+      <tr><td><code>snd_mapobjective_volume</code></td><td>0–1</td><td>bomb plant / defuse music</td></tr>
+      <tr><td><code>snd_mixer_master_level</code></td><td>0–1</td><td>master mixer level</td></tr>
+      <tr><td><code>snd_steamaudio_enable_perspective_correction</code></td><td>true/false</td><td>Steam Audio perspective correction</td></tr>
+    </tbody>
+  </table>
+  <p class="muted"><code>voice_enable</code>, <code>voice_scale</code>, <code>voice_mixer_volume</code>, <code>voice_mixer_mute</code>, <code>voice_positional</code>, <code>snd_dzmusic_volume</code> and <code>snd_music_selection</code> are all gone.</p>
+
+  <h3>Network &amp; prediction</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Convar</th><th>Range</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code>rate</code></td><td>default 786432 · 98304–1000000</td><td>bytes/sec the client will accept from the server. 1000000 is the real ceiling; the 786432 figure quoted everywhere is only the default</td></tr>
+      <tr><td><code>cl_interp</code></td><td class="muted">read-only</td><td>the engine owns it. Setting it is refused with <em>"Cannot change the value of cl_interp. Please remove this command from your script"</em></td></tr>
+      <tr><td><code>cl_interp_ratio</code></td><td>0–19</td><td>number of client interpolation ticks, the input <code>cl_interp</code> is derived from. Not <code>archive</code>, so it does not persist on its own</td></tr>
+      <tr><td><code>cl_predict_body_shot_fx</code></td><td>true/false</td><td>show the hit effect before the server confirms it</td></tr>
+      <tr><td><code>cl_predict_head_shot_fx</code></td><td>true/false</td><td>same, headshots</td></tr>
+      <tr><td><code>cl_predict_kill_ragdolls</code></td><td>true/false</td><td>ragdoll before server confirmation</td></tr>
+      <tr><td><code>cl_predict_weapon_drop</code></td><td>true/false</td><td>drop animation before confirmation</td></tr>
+      <tr><td><code>cl_predict_bomb_defusal</code></td><td>true/false</td><td>defuse completes client-side early</td></tr>
+    </tbody>
+  </table>
+  <p class="muted">The living <code>cl_predict_*_fx</code> convars are a taste call: on, the game feels snappier and occasionally lies to you; off, everything you see happened. The bare <code>cl_predict</code> and <code>cl_predictweapons</code> from CS:GO no longer exist, and neither do <code>cl_updaterate</code>, <code>cl_cmdrate</code> or <code>cl_lagcompensation</code>.</p>
+
+  <h3>Performance</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Convar</th><th>Range</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code>fps_max</code></td><td>default 400 · 0 = no limit</td><td>in-game frame cap</td></tr>
+      <tr><td><code>fps_max_ui</code></td><td>default 200 · 0 = no limit</td><td>cap while the game UI is displayed</td></tr>
+      <tr><td><code>engine_low_latency_sleep_after_client_tick</code></td><td>true/false</td><td>move the frame sleep after the tick</td></tr>
+      <tr><td><code>r_low_latency</code></td><td>numeric</td><td>latency mode</td></tr>
+      <tr><td><code>engine_no_focus_sleep</code></td><td>numeric</td><td>how much the engine sleeps while unfocused</td></tr>
+      <tr><td><code>r_drawtracers_firstperson</code></td><td>true/false</td><td>your own tracer rounds</td></tr>
+      <tr><td><code>r_drawparticles</code></td><td>true/false</td><td>particle rendering</td></tr>
+      <tr><td><code>cl_autohelp</code></td><td>true/false</td><td>automatic tutorial prompts</td></tr>
+      <tr><td><code>cl_invites_only_friends</code></td><td>true/false</td><td>block lobby invites from non-friends</td></tr>
+      <tr><td><code>cl_invites_only_mainmenu</code></td><td>true/false</td><td>only show invites while in the menu</td></tr>
+    </tbody>
+  </table>
+  <p class="muted">Dead on arrival, despite every "best settings" list: <code>cl_disablefreezecam</code>, <code>cl_showhelp</code>, <code>cl_join_advertise</code>, <code>fps_max_menu</code>, <code>mat_queue_mode</code>, <code>cl_forcepreload</code>, <code>cl_disablehtmlmotd</code>, <code>cl_downloadfilter</code>. Note <code>cl_autohelp</code> survives while <code>cl_showhelp</code> does not, and <code>r_dynamic</code> is <a href="dead-commands.html#startup">unknown in the console but read at launch</a> rather than dead. Full list: <a href="dead-commands.html">dead &amp; blocked commands</a>.</p>
+  <p class="muted">Launch options are separate from config files. Some commonly shared flags are obsolete, build-dependent or hardware-specific, so do not copy them blindly; verify a flag's current behavior before using it. Video settings themselves live in <code>cs2_video.txt</code>, not in a cfg.</p>
+
+  <h3>Console &amp; utility</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Command</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code>developer &lt;0-N&gt;</code></td><td>developer output level</td></tr>
+      <tr><td><code>log_color "Console" "RRGGBBAA"</code></td><td>console text colour. Takes a channel plus an RGBA hex value, and bare it prints the whole logging help block</td></tr>
+      <tr><td><code>log_verbosity</code> / <code>log_flags</code></td><td>the other two of the logging trio: verbosity per channel (<code>off</code>…<code>max</code>) and per-channel flags such as <code>DoNotEcho</code></td></tr>
+      <tr><td><code>key_findbinding &lt;substring&gt;</code></td><td>which keys run a bind containing that text</td></tr>
+      <tr><td><code>cl_ticktiming print</code></td><td>server tick timing. Bare it only prints usage: it wants <code>print [summary|detail]</code>, or a tick count <code>&lt;N&gt;</code> to repeat every N ticks</td></tr>
+      <tr><td><code>getpos</code></td><td>prints your position as a ready-made <code>setpos …;setang …</code> line</td></tr>
+      <tr><td><code>find</code>, <code>help</code></td><td>both exist and take an argument. <code>find</code> searches names and descriptions, <code>help</code> asks about one name</td></tr>
+      <tr><td><code>exec</code>, <code>alias</code>, <code>bind</code>, <code>unbind</code></td><td>the config primitives. Bare, each prints its own usage line. Bare <code>alias</code> dumps every alias currently defined, which is the fastest way to see whether your config loaded</td></tr>
+      <tr><td><code>con_enable</code></td><td>console availability. The <code>con_filter_*</code> family it used to work with is gone</td></tr>
+      <tr><td><code>key_updatelayout</code>, <code>map</code></td><td>exist. <code>key_listboxes</code>, <code>bindlist</code> and <code>listbinds</code> do not</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><p>The console beats any web list, including this one, but the way to ask is the bare name, not <code>find</code> or <code>help</code>. Type the convar: a value means alive, <code>Unknown command</code> means dead, a usage line means it is a command wanting arguments.</p></div>
+</section>
+
+<section id="ref-practice">
+  <h2><span class="n">08</span> Practice commands</h2>
+  <p>These need <code>sv_cheats 1</code> and a server you own, either a local map from the console or a private lobby. Every line below exists on a live client; the defaults in the comments are what an unmodified client reports.</p>
+  <pre><code>sv_cheats 1                       // default false
+sv_infinite_ammo 1                // default 0, flags: cheat replicated
+ammo_grenade_limit_total 5        // default 3, replicated
+mp_limitteams 0                   // default 2
+mp_autoteambalance 0              // default true
+mp_roundtime 60                   // default 1.92 (minutes)
+mp_roundtime_defuse 60            // default 1.92
+mp_maxmoney 60000                 // default 16000
+mp_startmoney 60000               // default 800
+mp_buytime 9999                   // default 20
+mp_buy_anywhere 1                 // default 0
+mp_freezetime 0                   // default 6, range 0-60
+sv_showimpacts 1                  // bullet impact boxes
+sv_showimpacts_penetration 1      // penetration detail
+sv_grenade_trajectory_prac_pipreview 1
+sv_grenade_trajectory_prac_trailtime 10
+sv_regeneration_force_on 1        // default false</code></pre>
+  <p>Wrap the block in its own <code>practice.cfg</code> and bind <code>exec practice</code> to a key. Everything here is server-side, so leaving the server resets it.</p>
+  <p><code>sv_rethrow_last_grenade</code> exists too. Bind it and you replay your last nade from where you threw it, which is worth a key on its own.</p>
+
+  <h3>Match flow &amp; bots</h3>
+  <pre><code>mp_warmuptime 9999
+mp_warmup_pausetimer 1
+mp_ignore_round_win_conditions 1
+mp_respawn_on_death_ct 1
+mp_respawn_on_death_t 1
+mp_death_drop_gun 0
+mp_death_drop_grenade 0
+mp_solid_teammates 0
+mp_teammates_are_enemies 1
+mp_free_armor 2
+sv_full_alltalk 1
+sv_pausable 1
+bot_stop 1
+bot_quota 0
+bot_difficulty 3</code></pre>
+
+  <h3>Movement physics</h3>
+  <p>All of these exist and take <code>sv_cheats</code>, and they are the basis of any surf, bhop or strafe practice config:</p>
+  <table class="cmdtable">
+    <thead><tr><th>Convar</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code>sv_accelerate</code> / <code>sv_airaccelerate</code></td><td>ground and air acceleration; air accel is the strafing one</td></tr>
+      <tr><td><code>sv_autobunnyhopping</code></td><td>hold jump to keep hopping</td></tr>
+      <tr><td><code>sv_enablebunnyhopping</code></td><td>removes the speed cap on consecutive jumps</td></tr>
+      <tr><td><code>sv_gravity</code>, <code>sv_maxvelocity</code>, <code>sv_maxspeed</code></td><td>the obvious three</td></tr>
+      <tr><td><code>sv_staminajumpcost</code>, <code>sv_staminalandcost</code>, <code>sv_staminarecoveryrate</code></td><td>the jump-slowdown model; zero them for bhop practice</td></tr>
+      <tr><td><code>sv_falldamage_scale</code>, <code>sv_ladder_scale_speed</code></td><td>fall damage and ladder speed</td></tr>
+      <tr><td><code>sv_showbullethits</code>, <code>sv_showimpacts</code></td><td>where shots actually landed</td></tr>
+    </tbody>
+  </table>
+  <p class="muted">Gone: <code>sv_grenade_trajectory</code> and <code>sv_grenade_trajectory_dash</code>. Only the <code>sv_grenade_trajectory_prac_*</code> variants above survive. Still unchecked here: <code>bot_kick</code>, <code>noclip</code>, <code>god</code>, <code>mp_warmup_end</code>, <code>mp_restartgame</code>.</p>
+</section>
+
+<section id="ref-limits">
+  <h2><span class="n">09</span> Limits, gotchas &amp; safety</h2>
+  <div class="grid">
+    <div class="card">
+      <h4>Configs are not a ruleset</h4>
+      <p>A cfg only issues commands the game exposes; it cannot replace external input software. That does not guarantee every bind is allowed everywhere: VAC, official-server restrictions and tournament rules are separate questions.</p>
+    </div>
+    <div class="card">
+      <h4>Tournament rules are stricter</h4>
+      <p>Rules vary by event and can change. Multi-action binds such as jump-throw, run-boost or quickswitch scripts may be restricted, so check the current ruleset before relying on one.</p>
+    </div>
+    <div class="card">
+      <h4>Aliases die on exit</h4>
+      <p>No alias is ever saved. If it isn't in a file that autoexec runs, it doesn't exist next launch.</p>
+    </div>
+    <div class="card">
+      <h4>Autoexec beats the menu</h4>
+      <p>Any convar pinned in autoexec is re-applied on every launch, silently undoing menu changes. Pin only what you never tune from the menu.</p>
+    </div>
+    <div class="card">
+      <h4>CS:GO configs don't transfer</h4>
+      <p>Many CS:GO convars were removed or renamed: for example <code>net_graph</code>, <code>m_rawinput</code> and parts of the <code>cl_bob*</code> family. Review an old config line by line; unknown commands are reported and skipped, but surviving commands can still change your setup.</p>
+    </div>
+    <div class="card">
+      <h4>Some convars are locked</h4>
+      <p>Cheat-flagged, replicated or server-owned convars refuse to change on servers you do not control. <code>help &lt;name&gt;</code> prints the flags in brackets, so you can tell before you write the line. See <a href="#ref-cvars">reading help output</a>.</p>
+    </div>
+    <div class="card">
+      <h4>Read configs before running them</h4>
+      <p>A downloaded cfg can <code>unbindall</code>, rebind your keys or run an <code>exec</code> you didn't expect. Read it first: it can wreck a setup you spent hours on, even though a cfg cannot run arbitrary external programs by itself.</p>
+    </div>
+    <div class="card">
+      <h4>Updates break configs</h4>
+      <p>Convars get renamed or removed each patch. When something stops working after an update, type the bare name in the console: <code>Unknown command</code> means it was removed, not that your config is broken.</p>
+    </div>
+  </div>
+</section>
+
+<section id="ref-debug">
+  <h2><span class="n">10</span> Debugging a config</h2>
+  <table>
+    <thead><tr><th>Symptom</th><th>Check</th></tr></thead>
+    <tbody>
+      <tr><td>Nothing loads</td><td>File is <code>autoexec.cfg.txt</code>, or it's in the userdata cfg folder instead of the install one. End the file with <code>echo</code> and watch for it.</td></tr>
+      <tr><td>Autoexec does not appear to load</td><td>First check the filename, install <code>cfg\</code> folder and an <code>echo</code> marker. CS2 normally loads <code>autoexec.cfg</code> without a launch option; if the marker is still missing, try <code>+exec autoexec</code> in Steam launch options or run <code>exec autoexec</code> manually.</td></tr>
+      <tr><td>A cfg is missing</td><td>Not silent. The log names it: <code>exec: couldn't exec '{*}cfg/&lt;name&gt;.cfg', unable to read file</code>. Check the path is relative to <code>cfg\</code>.</td></tr>
+      <tr><td>Half loads</td><td>Put an <code>alias v_&lt;name&gt; ""</code> marker at the top of every module and a diag file that calls each in load order. The first <code>Unknown command</code> names the file that never ran.</td></tr>
+      <tr><td>A key does nothing</td><td><code>key_findbinding jump</code>, for example, shows what still owns the action. Something bound later usually took the key; binds must come last.</td></tr>
+      <tr><td>A convar won't change</td><td><code>help &lt;name&gt;</code> and read the flags. <code>cheat</code> needs <code>sv_cheats</code>; <code>replicated</code> means the server decides. <code>cl_interp</code> is refused everywhere regardless.</td></tr>
+      <tr><td>Movement stuck</td><td>A <code>+</code> command latched without its <code>-</code>. Fire the release manually (<code>-forward</code>, <code>-attack</code>) or rebind the key to the stock command.</td></tr>
+      <tr><td>Settings revert after restart</td><td>Autoexec is pinning them, or Steam Cloud restored an older <code>.vcfg</code>.</td></tr>
+    </tbody>
+  </table>
+  <div class="note">
+    <p><strong>What <code>-condebug</code> logs, and what it doesn't.</strong> <code>console.log</code> captures <code>Unknown command</code> lines, <code>exec</code> traces, bind translations and command usage lines. It does <em>not</em> capture convar value echoes, <code>echo</code> output, or <code>help</code> output; those go to the console window only. So the log is an exact record of what failed and what ran, and no help at all for reading values.</p>
+  </div>
+  <div class="note"><p>Keep a two-line panic bind in every config that touches movement: <code>bind kp_0 "-forward;-back;-left;-right;-jump;-duck;-attack"</code>. It costs one key and saves a round.</p></div>
+</section>
+
+<section id="ref-status">
+  <h2><span class="n">11</span> Verification status</h2>
+  <p>These pages carry only what a CS2 console has answered for. That makes them incomplete on purpose, and this section says exactly where the edges are.</p>
+
+  <h3>How each claim was established</h3>
+  <table>
+    <thead><tr><th>Method</th><th>What it settles</th></tr></thead>
+    <tbody>
+      <tr><td>Bare name in the console</td><td>whether a convar or command exists, and its current value</td></tr>
+      <tr><td><code>help &lt;name&gt;</code></td><td>default, min/max and flags, the source of every range listed here</td></tr>
+      <tr><td><code>bind &lt;key&gt;</code> and the echoed translation</td><td>the scancode of a physical key</td></tr>
+      <tr><td><code>-condebug</code> and <code>console.log</code></td><td>startup exec order, and a permanent record of every <code>Unknown command</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Not yet checked</h3>
+  <div class="grid">
+    <div class="card">
+      <h4>Server-side commands</h4>
+      <p><code>unbindall</code>, <code>noclip</code>, <code>god</code>, <code>bot_kick</code>, <code>mp_restartgame</code>, <code>mp_warmup_end</code>, <code>host_writeconfig</code>. They need a local server with <code>sv_cheats 1</code>, or have side effects that make a blind probe a bad idea.</p>
+    </div>
+    <div class="card">
+      <h4>A handful of scancodes</h4>
+      <p><code>ESCAPE</code>, <code>SEMICOLON</code>, <code>PRINTSCREEN</code>, <code>NUMLOCK</code>, <code>KP_SLASH</code>, backtick, the two ISO-only keys and <code>F13</code>–<code>F24</code>. Listed with expected numbers on the <a href="scancodes.html#table">scancode page</a>, marked unconfirmed.</p>
+    </div>
+    <div class="card">
+      <h4>Value meanings</h4>
+      <p>Existence and limits are verified; what a given number <em>looks like</em> mostly is not. <code>cl_crosshaircolor</code> reads its set from <code>game_options.consoles.txt</code>, which has not been opened here.</p>
+    </div>
+    <div class="card">
+      <h4>Anything after the next patch</h4>
+      <p>Convars come and go with updates. Everything here was answered by a September 2026 build, so re-check an old line before you trust it.</p>
+    </div>
+  </div>
+  <p class="muted">Found something listed here that your console disagrees with? That is a bug in the page. <a href="https://github.com/sLix1337x/autoexec/issues">Open an issue</a> with the console output and it gets corrected.</p>
+</section>
+
+<div class="divider" id="cfg">
+  <h2>Part II · This repo's config</h2>
+      <p>A worked example of the ideas above. <strong>CS2 Advanced Config</strong> is a modular autoexec: null-bind movement with three switchable modes, every key routed through named verbs.</p>
+</div>
+
+<section id="cfg-install">
+  <h2><span class="n">12</span> Install</h2>
+  <ol>
+    <li>Download the <code>CS2 Advanced Config</code> folder from the repo.</li>
+    <li>Copy its contents into
+      <pre><code>...\Counter-Strike Global Offensive\game\csgo\cfg\</code></pre>
+      so that <code>autoexec.cfg</code> and the <code>core\</code> folder sit directly in <code>cfg\</code>.
+    </li>
+    <li>Launch CS2. The file normally runs automatically. For an immediate test, run <code>exec autoexec</code> in the developer console. If automatic loading fails, add <code>+exec autoexec</code> to Steam launch options as a fallback.</li>
+    <li>Watch the console for the <strong>CONFIGURATION LOADED SUCCESSFULLY</strong> banner. If it doesn't show, see <a href="#cfg-troubleshooting">Troubleshooting</a>.</li>
+  </ol>
+  <div class="card">
+    <h4>Launch options</h4>
+    <p>No launch option is required for this config. Add <code>+exec autoexec</code> only if CS2 does not discover the file normally; treat performance flags as separate, hardware- and build-dependent troubleshooting.</p>
+  </div>
+</section>
+
+<section id="cfg-structure">
+  <h2><span class="n">13</span> Structure</h2>
+  <p>The config is split by responsibility so any one piece can be read, changed, or diagnosed on its own.</p>
+  <pre><code>CS2 Advanced Config/
+├── autoexec.cfg              settings only — mouse, HUD, crosshair defaults,
+│                              viewmodel, audio, network, performance
+└── core/
+    ├── load.cfg               the ONLY place that defines load order
+    ├── reg.cfg                the verb layer: +slx_* aliases every key binds to
+    ├── keys.cfg                every bind — points at verbs, never at raw game commands
+    ├── diag.cfg                exec core/diag — finds which layer failed to load
+    ├── help.cfg                exec core/help — prints the key map (bound to F11)
+    └── modules/
+        ├── movement.cfg        null-bind state machine, 3 modes
+        ├── hud.cfg              radar boost, movement-mode HUD colour
+        ├── crosshair.cfg        7 presets on a shared cycle key
+        ├── viewmodel.cfg        8 positions on a shared cycle key
+        └── weapons.cfg          fast bomb/gun drop, knife quickswitch
+</code></pre>
+  <p class="muted">Binds never call a game command directly. They call a <code>+slx_*</code> verb declared once in <code>reg.cfg</code>. Change what a verb does in one place and every key bound to it follows.</p>
+</section>
+
+<section id="cfg-movement">
+  <h2><span class="n">14</span> Movement &amp; null-binds</h2>
+  <p>SOCD (opposite keys held at once) is resolved by a small state machine per axis instead of leaving it to CS2's own key handling. Three modes are one press apart on <span class="kbd">KP_4</span>:</p>
+  <div class="modes">
+    <div class="mode-card null">
+      <h4><span class="dot"></span>Null</h4>
+      <p>Holding both A+D (or W+S) locks the axis at neutral: no movement on that axis until one key is released. The standard competitive null-bind behaviour.</p>
+    </div>
+    <div class="mode-card strict">
+      <h4><span class="dot"></span>Strict</h4>
+      <p>Releasing either key of an opposing pair returns straight to neutral, rather than resuming movement in the direction of the key still held.</p>
+    </div>
+    <div class="mode-card raw">
+      <h4><span class="dot"></span>Raw</h4>
+      <p>Reproduces stock CS2: both keys held is a dead stop, same as vanilla binds. Included as a clean fallback / A-B reference.</p>
+    </div>
+  </div>
+  <p style="margin-top:14px"><span class="kbd">KP_5</span> is the master switch: null-binds entirely on/off, dropping straight back to stock <code>+forward</code>/<code>+left</code>/<code>+back</code>/<code>+right</code> binds when off.</p>
+  <p>Movement mode is mirrored on the HUD accent colour (toggle with <span class="kbd">KP_1</span>): <span style="color:#3fa9ff">light blue = null</span>, <span style="color:#a855f7">purple = strict</span>, <span style="color:#ffd166">yellow = raw</span>, grey = off.</p>
+</section>
+
+<section id="cfg-keys">
+  <h2><span class="n">15</span> Key map</h2>
+  <p>Press <span class="kbd">F11</span> in-game to print this map to console at any time.</p>
+
+  <h3>Keypad</h3>
+  <div class="keypad-map">
+    <div class="cell"><b>KP_7</b>crosshair cycle</div>
+    <div class="cell"><b>KP_8</b>crosshair → dot</div>
+    <div class="cell"><b>KP_9</b>crosshair outline</div>
+    <div class="cell"><b>KP_4</b>movement mode cycle</div>
+    <div class="cell"><b>KP_5</b>movement on/off</div>
+    <div class="cell"><b>KP_6</b>quickswitch (hold)</div>
+    <div class="cell"><b>KP_1</b>HUD mode-colour toggle</div>
+    <div class="cell"><b>KP_2</b>—</div>
+    <div class="cell"><b>KP_3</b>—</div>
+    <div class="cell panic"><b>KP_0</b>PANIC. Clears one stuck input per press (axis, jump, duck, sprint, use). Mash it.</div>
+  </div>
+
+  <h3>Everything else</h3>
+  <table>
+    <thead><tr><th>Key</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><span class="kbd">W A S D</span></td><td>movement, routed through the null-bind verbs</td></tr>
+      <tr><td><span class="kbd">Space</span></td><td>jump</td></tr>
+      <tr><td><span class="kbd">Ctrl</span></td><td>duck</td></tr>
+      <tr><td><span class="kbd">Mouse Wheel Down</span></td><td>jump</td></tr>
+      <tr><td><span class="kbd">Mouse Wheel Up</span></td><td>next weapon</td></tr>
+      <tr><td><span class="kbd">Mouse1 / Mouse2</span></td><td>attack / attack2 (unchanged, straight to the engine)</td></tr>
+      <tr><td><span class="kbd">E</span></td><td>use</td></tr>
+      <tr><td><span class="kbd">5</span></td><td>drop secondary</td></tr>
+      <tr><td><span class="kbd">`</span> (scancode53)</td><td>fast bomb drop</td></tr>
+      <tr><td><span class="kbd">Z X C V</span></td><td>decoy / smoke / HE / molotov</td></tr>
+      <tr><td><span class="kbd">Mouse5</span></td><td>flashbang</td></tr>
+      <tr><td><span class="kbd">N</span></td><td>radar zoom step</td></tr>
+      <tr><td><span class="kbd">M</span> (hold)</td><td>radar zoom out</td></tr>
+      <tr><td><span class="kbd">Left Arrow</span></td><td>toggle crosshair colour</td></tr>
+      <tr><td><span class="kbd">F7</span></td><td>cycle viewmodel position</td></tr>
+      <tr><td><span class="kbd">F11</span></td><td>print key map</td></tr>
+      <tr><td><span class="kbd">Up / Down Arrow</span></td><td>volume 1 / 0.1</td></tr>
+      <tr><td><span class="kbd">F3</span></td><td>voice on/off</td></tr>
+      <tr><td><span class="kbd">Mouse4</span></td><td>push to talk</td></tr>
+      <tr><td><span class="kbd">J</span></td><td>sensitivity 0.64 (1600 DPI)</td></tr>
+      <tr><td><span class="kbd">Tab</span></td><td>team menu</td></tr>
+      <tr><td><span class="kbd">F4</span></td><td>toggle console</td></tr>
+      <tr><td><span class="kbd">F9</span></td><td>dump server tick timing to console</td></tr>
+      <tr><td><span class="kbd">H</span></td><td>switch hands (native CS2 toggle)</td></tr>
+      <tr><td><span class="kbd">F</span></td><td>inspect weapon</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="cfg-crosshair">
+  <h2><span class="n">16</span> Crosshair presets</h2>
+  <p><span class="kbd">KP_7</span> cycles all seven, <span class="kbd">KP_8</span> jumps straight to the dot, <span class="kbd">KP_9</span> steps the outline through off → thick → thin, <span class="kbd">Left Arrow</span> toggles colour between white and yellow.</p>
+  <div class="grid">
+    <div class="card"><h4>1 · Big cross</h4><p>size 4.0, no outline, no dot</p></div>
+    <div class="card"><h4>2 · Dot <span class="muted">(default)</span></h4><p>gap -5, thickness 0.9, outlined</p></div>
+    <div class="card"><h4>3 · Thin cross</h4><p>thickness 0.1, tight gap</p></div>
+    <div class="card"><h4>4 · Wide gap</h4><p>size 6.0, gap 3.0</p></div>
+    <div class="card"><h4>5 · Classic</h4><p>size 3.5, gap -1.8</p></div>
+    <div class="card"><h4>6 · Tiny</h4><p>size 1.0, gap -4</p></div>
+    <div class="card"><h4>7 · Small</h4><p>size 1.6, outlined</p></div>
+  </div>
+</section>
+
+<section id="cfg-viewmodel">
+  <h2><span class="n">17</span> Viewmodel positions</h2>
+  <p><span class="kbd">F7</span> cycles through all eight. FOV is fixed at 68 across every position.</p>
+  <table>
+    <thead><tr><th>#</th><th>Name</th><th>Feel</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Centre</td><td>default: x 0.5, y 0.5, z -2.0</td></tr>
+      <tr><td>2</td><td>Tuck</td><td>near, pulled back</td></tr>
+      <tr><td>3</td><td>Lift</td><td>near, forward</td></tr>
+      <tr><td>4</td><td>Low</td><td>right, pulled back</td></tr>
+      <tr><td>5</td><td>Right</td><td>right, raised</td></tr>
+      <tr><td>6</td><td>Far</td><td>right, centred</td></tr>
+      <tr><td>7</td><td>High</td><td>far right, forward</td></tr>
+      <tr><td>8</td><td>Deep</td><td>far right, pulled back</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="cfg-hud">
+  <h2><span class="n">18</span> HUD &amp; feel</h2>
+  <div class="grid">
+    <div class="card"><h4>Movement-mode colour</h4><p>HUD accent repaints on every mode change: blue (null), purple (strict), yellow (raw), grey (off). Toggle with <span class="kbd">KP_1</span>. Turning it back on catches up on the next mode change; it doesn't repaint instantly.</p></div>
+    <div class="card"><h4>Radar boost</h4><p>Hold <span class="kbd">M</span> to zoom the radar out (0.70), release to snap back to the tight default (0.35).</p></div>
+    <div class="card"><h4>Prediction off</h4><p>Body/head-shot FX, ragdolls, weapon drop and bomb defusal all wait for server confirmation rather than playing client-side early.</p></div>
+    <div class="card"><h4>Performance</h4><p><code>fps_max 500</code>, death cam skipped, tutorial pop-ups and tracers off.</p></div>
+  </div>
+</section>
+
+<section id="cfg-troubleshooting">
+  <h2><span class="n">19</span> Troubleshooting this config</h2>
+  <div class="grid">
+    <div class="card">
+      <h4>Movement feels stuck</h4>
+      <p>Tap <span class="kbd">KP_0</span> repeatedly; each press clears one latched input (strafe axis, forward axis, jump, duck, sprint, use). Six presses covers all of them.</p>
+    </div>
+    <div class="card">
+      <h4>Config didn't load</h4>
+      <p>Open console and run <code>exec core/diag</code>. It calls a marker in every layer in load order, and the first <code>Unknown command: v_&lt;name&gt;</code> names the file that never ran; everything after it is meaningless.</p>
+    </div>
+    <div class="card">
+      <h4>Total reset</h4>
+      <p>In console: <code>bind w +forward; bind a +left; bind s +back; bind d +right</code> restores plain stock movement regardless of what state the config is in.</p>
+    </div>
+    <div class="card">
+      <h4>Nothing happens on a keypad key</h4>
+      <p>Run <code>key_findbinding slx</code>. If the verb isn't on the key, another config loaded after this one took it. <code>keys.cfg</code> must run last.</p>
+    </div>
+  </div>
+</section>
+
+<nav class="pagenav">
+  <a class="next" href="scancodes.html"><span class="dir">Next</span>Scancode table →</a>
+</nav>
+
+<footer>
+  CS2 Config Docs · <a href="https://github.com/sLix1337x/autoexec">sLix1337x/autoexec</a> · MIT licensed<br>
+  <span class="muted">Every command listed here was answered by a live CS2 console. Untested ones are badged <em>pending</em>, dead ones are on the <a href="dead-commands.html">dead commands</a> page.</span>
+</footer>
+
+</main>
+
+<aside class="toc">
+  <p class="toc-title">On this page</p>
+  <nav></nav>
+</aside>
+
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<div class="searchmodal" id="searchModal" hidden>
+  <div class="searchbox">
+    <input type="search" placeholder="Search headings, convars, commands…" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+    <div class="results"></div>
+    <div class="search-foot">
+      <span><kbd class="key">↑</kbd><kbd class="key">↓</kbd> navigate</span>
+      <span><kbd class="key">↵</kbd> open</span>
+      <span><kbd class="key">esc</kbd> close</span>
+    </div>
+  </div>
+</div>
+
+<script src="docs.js" defer></script>
+
+</body>
+</html>

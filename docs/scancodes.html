@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CS2 scancode table</title>
+<meta name="description" content="Every CS2 keyboard scancode, why binding by scancode beats binding by key name, and how to read any key's scancode straight out of the console.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="skip" href="#content">Skip to content</a>
+
+<header class="topbar">
+  <button class="icon-btn" id="menuBtn" aria-label="Open navigation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  <a class="brand" href="index.html"><span class="brand-mark">CS2</span> Config Docs</a>
+  <nav class="topnav">
+    <a href="index.html">Reference</a>
+    <a href="scancodes.html" aria-current="page">Scancodes</a>
+    <a href="dead-commands.html">Dead commands</a>
+  </nav>
+  <span class="spacer"></span>
+  <button class="searchbtn" id="searchBtn" aria-label="Search the docs">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+    <span class="label">Search docs…</span><kbd>Ctrl K</kbd>
+  </button>
+  <a class="icon-btn" href="https://github.com/sLix1337x/autoexec" aria-label="Repository on GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.06-.72.08-.7.08-.7 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.1-.76.4-1.27.74-1.56-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg></a>
+  <button class="icon-btn" id="themeBtn" aria-label="Toggle light or dark theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+</header>
+
+<div class="layout">
+
+<aside class="sidebar" id="sidebar">
+  <details class="nav-group" open>
+    <summary>Scancodes</summary>
+    <a href="#why"><span class="num">01</span>Why scancodes</a>
+    <a href="#find"><span class="num">02</span>Find any scancode</a>
+    <a href="#table"><span class="num">03</span>The table</a>
+    <a class="sub" href="#letters">Letters</a>
+    <a class="sub" href="#digits">Digits &amp; punctuation</a>
+    <a class="sub" href="#control">Control &amp; navigation</a>
+    <a class="sub" href="#function">Function keys</a>
+    <a class="sub" href="#numpad">Numpad</a>
+    <a class="sub" href="#modifiers">Modifiers</a>
+    <a href="#notmapped"><span class="num">04</span>Not scancodes</a>
+  </details>
+
+  <details class="nav-group" open>
+    <summary>Other pages</summary>
+    <a href="index.html">Config reference</a>
+    <a href="index.html#ref-binds">Binds &amp; key names</a>
+    <a href="dead-commands.html">Dead &amp; blocked commands</a>
+    <a href="https://github.com/sLix1337x/autoexec">Repository</a>
+  </details>
+</aside>
+
+<main id="content">
+
+<div class="page-head">
+  <p class="eyebrow">Reference</p>
+  <h1>Scancode table</h1>
+  <p class="lead">Binding by scancode binds the <em>physical key</em>, not the character your layout prints on it. The full table is below, with how CS2 numbers them and how to read any key's number out of the console in one line.</p>
+  <div class="hero-links">
+    <a class="btn primary" href="#table">Jump to the table</a>
+    <a class="btn" href="#find">Find a key's scancode</a>
+  </div>
+</div>
+
+<section id="why">
+  <h2><span class="n">01</span> Why bind by scancode</h2>
+  <p>A key name is a <em>character</em>: <code>bind w +forward</code> means "whatever key produces w on the active layout". A scancode is a <em>position</em>: <code>bind scancode26 +forward</code> means "the key one row up and one right of caps lock", regardless of layout.</p>
+  <div class="grid">
+    <div class="card">
+      <h4>Layouts stop mattering</h4>
+      <p>On QWERTZ the <code>y</code> and <code>z</code> keys swap places; on AZERTY the whole left block moves. A name-based config lands on the wrong physical keys. A scancode config doesn't move.</p>
+    </div>
+    <div class="card">
+      <h4>Layout switching stops breaking things</h4>
+      <p>If you switch OS input language while the game runs, name binds follow the new layout. Scancode binds stay where your fingers are.</p>
+    </div>
+    <div class="card">
+      <h4>Punctuation keys become unambiguous</h4>
+      <p>The key left of <kbd>1</kbd> is <code>`</code>, <code>^</code>, <code>²</code> or <code>&lt;</code> depending on where you live, but it is always <code>scancode53</code>.</p>
+    </div>
+    <div class="card">
+      <h4>It is what CS2 stores anyway</h4>
+      <p>Bind by name and the game translates to a scancode immediately, then echoes the translation. You are writing the same bind either way; one form survives contact with another keyboard.</p>
+    </div>
+  </div>
+  <div class="note">
+    <p><strong>The numbering is not Valve's.</strong> CS2 scancode numbers are USB HID keyboard usage IDs (HID usage page 0x07), the codes the keyboard itself sends. That is why <code>a</code> is 4 rather than 1: the first four IDs on that page are reserved for error states.</p>
+  </div>
+</section>
+
+<section id="find">
+  <h2><span class="n">02</span> Find any key's scancode</h2>
+  <p>Bind the key by its name and let the game tell you. CS2 prints the translation every time it interprets a name-based bind:</p>
+  <pre><code>&gt; bind w +forward
+Interpreting bind command as:
+    bind scancode26 "+forward" // US English key name "w"</code></pre>
+  <p>That comment is the answer: <code>w</code> is <code>scancode26</code>. It works for any key, including ones your layout can't type: bind those from the in-game settings menu and watch the same line appear.</p>
+  <div class="note">
+    <p>To collect a batch, add <code>-condebug</code> to launch options and read <code>game\csgo\console.log</code> in a text editor afterwards; every <code>Interpreting bind command as</code> line is in there. Add <code>-conclearlog</code> after it to start each session with an empty file.</p>
+  </div>
+  <h3>CS2 tells you when your layout is the problem</h3>
+  <p>On a non-US layout the console adds a second suggestion of its own whenever the requested character sits somewhere else physically:</p>
+  <pre><code>If the binding doesn't work and you're not using a US English keyboard, you should try:
+    bind scancode29 "sc_x" // US English key name "z"
+Interpreting bind command as:
+    bind scancode28 "sc_x" // US English key name "y"</code></pre>
+  <p>That is a QWERTZ board being told that its <code>y</code> key is physically the US <code>z</code> key. The same hint appears for punctuation whose position moves. When you see it, the scancode in the hint is usually the one you actually want.</p>
+
+  <p>Both forms work in a config, and the scancode form is the one that keeps working:</p>
+  <pre><code>bind w          "+slx_forward"   // breaks on a different layout
+bind scancode26 "+slx_forward"   // binds the physical key, always</code></pre>
+</section>
+
+<section id="table">
+  <h2><span class="n">03</span> The table</h2>
+  <p class="lead"><span class="ok">✓</span> = read from live CS2 console output. Roughly ninety keys have been checked and every one matched its USB HID usage ID exactly, modifiers included. The handful of unticked rows are <strong>not verified</strong>: the number is the HID ID CS2 is expected to use, but no console line has confirmed it. Check one with the method above before building a config on it.</p>
+  <input class="filter" id="scFilter" type="text" placeholder="filter: KP_, F1, arrow, 26" aria-label="Filter scancodes">
+  <p class="filter-hint">Filters every table below by key name or number.</p>
+
+  <h3 id="letters">Letters</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Key</th><th>Scancode</th><th>Key</th><th>Scancode</th></tr></thead>
+    <tbody>
+      <tr><td><code>a</code> <span class="ok">✓</span></td><td><code>scancode4</code></td><td><code>n</code> <span class="ok">✓</span></td><td><code>scancode17</code></td></tr>
+      <tr><td><code>b</code> <span class="ok">✓</span></td><td><code>scancode5</code></td><td><code>o</code> <span class="ok">✓</span></td><td><code>scancode18</code></td></tr>
+      <tr><td><code>c</code> <span class="ok">✓</span></td><td><code>scancode6</code></td><td><code>p</code> <span class="ok">✓</span></td><td><code>scancode19</code></td></tr>
+      <tr><td><code>d</code> <span class="ok">✓</span></td><td><code>scancode7</code></td><td><code>q</code> <span class="ok">✓</span></td><td><code>scancode20</code></td></tr>
+      <tr><td><code>e</code> <span class="ok">✓</span></td><td><code>scancode8</code></td><td><code>r</code> <span class="ok">✓</span></td><td><code>scancode21</code></td></tr>
+      <tr><td><code>f</code> <span class="ok">✓</span></td><td><code>scancode9</code></td><td><code>s</code> <span class="ok">✓</span></td><td><code>scancode22</code></td></tr>
+      <tr><td><code>g</code> <span class="ok">✓</span></td><td><code>scancode10</code></td><td><code>t</code> <span class="ok">✓</span></td><td><code>scancode23</code></td></tr>
+      <tr><td><code>h</code> <span class="ok">✓</span></td><td><code>scancode11</code></td><td><code>u</code> <span class="ok">✓</span></td><td><code>scancode24</code></td></tr>
+      <tr><td><code>i</code> <span class="ok">✓</span></td><td><code>scancode12</code></td><td><code>v</code> <span class="ok">✓</span></td><td><code>scancode25</code></td></tr>
+      <tr><td><code>j</code> <span class="ok">✓</span></td><td><code>scancode13</code></td><td><code>w</code> <span class="ok">✓</span></td><td><code>scancode26</code></td></tr>
+      <tr><td><code>k</code> <span class="ok">✓</span></td><td><code>scancode14</code></td><td><code>x</code> <span class="ok">✓</span></td><td><code>scancode27</code></td></tr>
+      <tr><td><code>l</code> <span class="ok">✓</span></td><td><code>scancode15</code></td><td><code>y</code> <span class="ok">✓</span></td><td><code>scancode28</code></td></tr>
+      <tr><td><code>m</code> <span class="ok">✓</span></td><td><code>scancode16</code></td><td><code>z</code> <span class="ok">✓</span></td><td><code>scancode29</code></td></tr>
+    </tbody>
+  </table>
+  <p class="muted">Letters are alphabetical by <em>US</em> letter and by position: <code>scancode4</code> is the key US layouts call <code>a</code>, which on AZERTY types <code>q</code>. Bind by where the key is, not what it types.</p>
+
+  <h3 id="digits">Digits &amp; punctuation: the top rows</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Key (US)</th><th>Scancode</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td><code>1</code> <span class="ok">✓</span></td><td><code>scancode30</code></td><td>number row, not numpad</td></tr>
+      <tr><td><code>2</code> <span class="ok">✓</span></td><td><code>scancode31</code></td><td></td></tr>
+      <tr><td><code>3</code> <span class="ok">✓</span></td><td><code>scancode32</code></td><td></td></tr>
+      <tr><td><code>4</code> <span class="ok">✓</span></td><td><code>scancode33</code></td><td></td></tr>
+      <tr><td><code>5</code> <span class="ok">✓</span></td><td><code>scancode34</code></td><td></td></tr>
+      <tr><td><code>6</code> <span class="ok">✓</span></td><td><code>scancode35</code></td><td></td></tr>
+      <tr><td><code>7</code> <span class="ok">✓</span></td><td><code>scancode36</code></td><td></td></tr>
+      <tr><td><code>8</code> <span class="ok">✓</span></td><td><code>scancode37</code></td><td></td></tr>
+      <tr><td><code>9</code> <span class="ok">✓</span></td><td><code>scancode38</code></td><td></td></tr>
+      <tr><td><code>0</code> <span class="ok">✓</span></td><td><code>scancode39</code></td><td></td></tr>
+      <tr><td><code>-</code> <span class="ok">✓</span></td><td><code>scancode45</code></td><td>right of <code>0</code></td></tr>
+      <tr><td><code>=</code> <span class="ok">✓</span></td><td><code>scancode46</code></td><td></td></tr>
+      <tr><td><code>[</code> <span class="ok">✓</span></td><td><code>scancode47</code></td><td></td></tr>
+      <tr><td><code>]</code> <span class="ok">✓</span></td><td><code>scancode48</code></td><td></td></tr>
+      <tr><td><code>\</code> <span class="ok">✓</span></td><td><code>scancode49</code></td><td>above <kbd>Enter</kbd> on ANSI</td></tr>
+      <tr><td>non-US <code>#</code> / <code>~</code></td><td><code>scancode50</code></td><td>the extra key ISO boards have left of <kbd>Enter</kbd></td></tr>
+      <tr><td><code>;</code></td><td><code>scancode51</code></td><td></td></tr>
+      <tr><td><code>'</code> <span class="ok">✓</span></td><td><code>scancode52</code></td><td></td></tr>
+      <tr><td><code>`</code></td><td><code>scancode53</code></td><td>widely used in configs, not confirmed here. Left of <kbd>1</kbd>: <code>^</code> on QWERTZ, <code>²</code> on AZERTY</td></tr>
+      <tr><td><code>,</code> <span class="ok">✓</span></td><td><code>scancode54</code></td><td></td></tr>
+      <tr><td><code>.</code> <span class="ok">✓</span></td><td><code>scancode55</code></td><td></td></tr>
+      <tr><td><code>/</code> <span class="ok">✓</span></td><td><code>scancode56</code></td><td></td></tr>
+      <tr><td>non-US <code>\</code> / <code>&lt;</code></td><td><code>scancode100</code></td><td>the extra key ISO boards have right of left <kbd>Shift</kbd></td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="control">Control &amp; navigation</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Key</th><th>Scancode</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td><code>ENTER</code> <span class="ok">✓</span></td><td><code>scancode40</code></td><td>main enter, not <code>KP_ENTER</code></td></tr>
+      <tr><td><code>ESCAPE</code></td><td><code>scancode41</code></td><td>the game reserves it for the menu</td></tr>
+      <tr><td><code>BACKSPACE</code> <span class="ok">✓</span></td><td><code>scancode42</code></td><td></td></tr>
+      <tr><td><code>TAB</code> <span class="ok">✓</span></td><td><code>scancode43</code></td><td></td></tr>
+      <tr><td><code>SPACE</code> <span class="ok">✓</span></td><td><code>scancode44</code></td><td></td></tr>
+      <tr><td><code>CAPSLOCK</code> <span class="ok">✓</span></td><td><code>scancode57</code></td><td></td></tr>
+      <tr><td><code>PRINTSCREEN</code></td><td><code>scancode70</code></td><td></td></tr>
+      <tr><td><code>SCROLLLOCK</code> <span class="ok">✓</span></td><td><code>scancode71</code></td><td></td></tr>
+      <tr><td><code>PAUSE</code> <span class="ok">✓</span></td><td><code>scancode72</code></td><td></td></tr>
+      <tr><td><code>INS</code> <span class="ok">✓</span></td><td><code>scancode73</code></td><td></td></tr>
+      <tr><td><code>HOME</code> <span class="ok">✓</span></td><td><code>scancode74</code></td><td></td></tr>
+      <tr><td><code>PGUP</code> <span class="ok">✓</span></td><td><code>scancode75</code></td><td></td></tr>
+      <tr><td><code>DEL</code> <span class="ok">✓</span></td><td><code>scancode76</code></td><td></td></tr>
+      <tr><td><code>END</code> <span class="ok">✓</span></td><td><code>scancode77</code></td><td></td></tr>
+      <tr><td><code>PGDN</code> <span class="ok">✓</span></td><td><code>scancode78</code></td><td></td></tr>
+      <tr><td><code>RIGHTARROW</code> <span class="ok">✓</span></td><td><code>scancode79</code></td><td></td></tr>
+      <tr><td><code>LEFTARROW</code> <span class="ok">✓</span></td><td><code>scancode80</code></td><td></td></tr>
+      <tr><td><code>DOWNARROW</code> <span class="ok">✓</span></td><td><code>scancode81</code></td><td></td></tr>
+      <tr><td><code>UPARROW</code> <span class="ok">✓</span></td><td><code>scancode82</code></td><td></td></tr>
+      <tr><td><code>NUMLOCK</code></td><td><code>scancode83</code></td><td>numpad codes below do not depend on its state</td></tr>
+      <tr><td><code>APP</code> <span class="ok">✓</span></td><td><code>scancode101</code></td><td>the context-menu key. <code>APP</code> is the name CS2 answers to</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="function">Function keys</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Key</th><th>Scancode</th><th>Key</th><th>Scancode</th></tr></thead>
+    <tbody>
+      <tr><td><code>F1</code> <span class="ok">✓</span></td><td><code>scancode58</code></td><td><code>F7</code> <span class="ok">✓</span></td><td><code>scancode64</code></td></tr>
+      <tr><td><code>F2</code> <span class="ok">✓</span></td><td><code>scancode59</code></td><td><code>F8</code> <span class="ok">✓</span></td><td><code>scancode65</code></td></tr>
+      <tr><td><code>F3</code> <span class="ok">✓</span></td><td><code>scancode60</code></td><td><code>F9</code> <span class="ok">✓</span></td><td><code>scancode66</code></td></tr>
+      <tr><td><code>F4</code> <span class="ok">✓</span></td><td><code>scancode61</code></td><td><code>F10</code> <span class="ok">✓</span></td><td><code>scancode67</code></td></tr>
+      <tr><td><code>F5</code> <span class="ok">✓</span></td><td><code>scancode62</code></td><td><code>F11</code> <span class="ok">✓</span></td><td><code>scancode68</code></td></tr>
+      <tr><td><code>F6</code> <span class="ok">✓</span></td><td><code>scancode63</code></td><td><code>F12</code> <span class="ok">✓</span></td><td><code>scancode69</code></td></tr>
+    </tbody>
+  </table>
+  <p class="muted">F13–F24 continue at <code>scancode104</code>–<code>scancode115</code> if your board has them.</p>
+
+  <h3 id="numpad">Numpad</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Key</th><th>Scancode</th><th>Key</th><th>Scancode</th></tr></thead>
+    <tbody>
+      <tr><td><code>KP_SLASH</code> <span class="muted">/</span></td><td><code>scancode84</code></td><td><code>KP_5</code> <span class="ok">✓</span></td><td><code>scancode93</code></td></tr>
+      <tr><td><code>KP_MULTIPLY</code> <span class="muted">*</span> <span class="ok">✓</span></td><td><code>scancode85</code></td><td><code>KP_6</code> <span class="ok">✓</span></td><td><code>scancode94</code></td></tr>
+      <tr><td><code>KP_MINUS</code> <span class="muted">−</span> <span class="ok">✓</span></td><td><code>scancode86</code></td><td><code>KP_7</code> <span class="ok">✓</span></td><td><code>scancode95</code></td></tr>
+      <tr><td><code>KP_PLUS</code> <span class="muted">+</span> <span class="ok">✓</span></td><td><code>scancode87</code></td><td><code>KP_8</code> <span class="ok">✓</span></td><td><code>scancode96</code></td></tr>
+      <tr><td><code>KP_ENTER</code> <span class="ok">✓</span></td><td><code>scancode88</code></td><td><code>KP_9</code> <span class="ok">✓</span></td><td><code>scancode97</code></td></tr>
+      <tr><td><code>KP_1</code> <span class="ok">✓</span></td><td><code>scancode89</code></td><td><code>KP_0</code> <span class="ok">✓</span></td><td><code>scancode98</code></td></tr>
+      <tr><td><code>KP_2</code> <span class="ok">✓</span></td><td><code>scancode90</code></td><td><code>KP_DEL</code> <span class="muted">.</span> <span class="ok">✓</span></td><td><code>scancode99</code></td></tr>
+      <tr><td><code>KP_3</code> <span class="ok">✓</span></td><td><code>scancode91</code></td><td><code>KP_EQUALS</code> <span class="muted">=</span> <span class="ok">✓</span></td><td><code>scancode103</code></td></tr>
+      <tr><td><code>KP_4</code> <span class="ok">✓</span></td><td><code>scancode92</code></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+  <div class="note">
+    <p>The numpad is the cleanest block to build a config on: ten keys nothing else claims, identical on every layout, and the scancodes run in the same order as the printed digits: <code>KP_1</code>…<code>KP_9</code> is 89…97, then <code>KP_0</code> at 98.</p>
+  </div>
+
+  <h3 id="modifiers">Modifiers</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Key name</th><th>Scancode</th><th>Key name</th><th>Scancode</th></tr></thead>
+    <tbody>
+      <tr><td><code>CTRL</code> <span class="ok">✓</span></td><td><code>scancode224</code></td><td><code>RCTRL</code> <span class="ok">✓</span></td><td><code>scancode228</code></td></tr>
+      <tr><td><code>SHIFT</code> <span class="ok">✓</span></td><td><code>scancode225</code></td><td><code>RSHIFT</code> <span class="ok">✓</span></td><td><code>scancode229</code></td></tr>
+      <tr><td><code>ALT</code> <span class="ok">✓</span></td><td><code>scancode226</code></td><td><code>RALT</code> <span class="ok">✓</span> <span class="muted">AltGr</span></td><td><code>scancode230</code></td></tr>
+      <tr><td><code>LWIN</code> <span class="ok">✓</span></td><td><code>scancode227</code></td><td><code>RWIN</code> <span class="ok">✓</span></td><td><code>scancode231</code></td></tr>
+      <tr><td><code>APP</code> <span class="ok">✓</span> <span class="muted">menu key</span></td><td><code>scancode101</code></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+  <div class="note">
+    <p><strong><code>CTRL</code>, <code>SHIFT</code> and <code>ALT</code> are the left-hand keys, not both.</strong> Each resolves to the left scancode (224, 225, 226), and the right-hand keys are separate names with their own codes. A config that binds <code>CTRL</code> leaves right ctrl unbound.</p>
+  </div>
+
+  <h3>Still unconfirmed</h3>
+  <p>A short list, kept honest rather than filled in:</p>
+  <table class="cmdtable">
+    <thead><tr><th>Key</th><th>Expected</th><th>Why it is not ticked</th></tr></thead>
+    <tbody>
+      <tr><td><code>ESCAPE</code></td><td><code>scancode41</code></td><td>not probed on purpose: rebinding it locks you out of the menu mid-session</td></tr>
+      <tr><td><code>SEMICOLON</code></td><td><code>scancode51</code></td><td><code>;</code> is the command separator, so it needs quoting to survive the parser</td></tr>
+      <tr><td><code>PRINTSCREEN</code>, <code>NUMLOCK</code>, <code>KP_SLASH</code></td><td>70, 83, 84</td><td>these names produced no translation line, so either the key name differs or the game does not take them</td></tr>
+      <tr><td>ISO extras</td><td>50, 100</td><td>the two keys ANSI boards do not have: left of <kbd>Enter</kbd>, and right of left <kbd>Shift</kbd>. Bind them from the settings menu on an ISO board to read the number</td></tr>
+      <tr><td><code>F13</code>–<code>F24</code></td><td>104–115</td><td>no board here has them</td></tr>
+    </tbody>
+  </table>
+  </section>
+
+<section id="notmapped">
+  <h2><span class="n">04</span> What has no scancode</h2>
+  <p>Scancodes are a <em>keyboard</em> numbering, and CS2 confirms it by staying silent: binding <code>MOUSE1</code>–<code>MOUSE5</code>, <code>MWHEELUP</code> or <code>MWHEELDOWN</code> produces no <code>Interpreting bind command as</code> line at all, because there is nothing to translate. Mouse inputs keep their names:</p>
+  <table>
+    <thead><tr><th>Input</th><th>Bind as</th></tr></thead>
+    <tbody>
+      <tr><td>Mouse buttons</td><td><code>MOUSE1</code>–<code>MOUSE5</code></td></tr>
+      <tr><td>Mouse wheel</td><td><code>MWHEELUP</code>, <code>MWHEELDOWN</code></td></tr>
+      <tr><td>Extra mouse buttons past 5</td><td>usually not seen by the game. Map them to a key in the mouse software, then bind that key's scancode</td></tr>
+    </tbody>
+  </table>
+  <p>Mixing forms in one config is fine and normal: mouse by name, keyboard by scancode.</p>
+  <pre><code>bind mouse1     "+attack"
+bind scancode26 "+slx_forward"</code></pre>
+</section>
+
+<nav class="pagenav">
+  <a href="index.html"><span class="dir">Previous</span>← Config reference</a>
+  <a class="next" href="dead-commands.html"><span class="dir">Next</span>Dead &amp; blocked commands →</a>
+</nav>
+
+<footer>
+  CS2 Config Docs · <a href="https://github.com/sLix1337x/autoexec">sLix1337x/autoexec</a> · MIT licensed<br>
+  <span class="muted">✓ = read from live console output. Everything else is the HID usage table CS2 numbers from, so verify with <code>bind</code> before relying on it.</span>
+</footer>
+
+</main>
+
+<aside class="toc">
+  <p class="toc-title">On this page</p>
+  <nav></nav>
+</aside>
+
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<div class="searchmodal" id="searchModal" hidden>
+  <div class="searchbox">
+    <input type="search" placeholder="Search headings, convars, commands…" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+    <div class="results"></div>
+    <div class="search-foot">
+      <span><kbd class="key">↑</kbd><kbd class="key">↓</kbd> navigate</span>
+      <span><kbd class="key">↵</kbd> open</span>
+      <span><kbd class="key">esc</kbd> close</span>
+    </div>
+  </div>
+</div>
+
+<script src="docs.js" defer></script>
+
+</body>
+</html>

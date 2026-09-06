@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dead &amp; blocked CS2 commands</title>
+<meta name="description" content="Console commands that guides still recommend for Counter-Strike 2 but that no longer exist, never existed, or are refused by the engine. Each entry is verified against the in-game console.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="skip" href="#content">Skip to content</a>
+
+<header class="topbar">
+  <button class="icon-btn" id="menuBtn" aria-label="Open navigation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  <a class="brand" href="index.html"><span class="brand-mark">CS2</span> Config Docs</a>
+  <nav class="topnav">
+    <a href="index.html">Reference</a>
+    <a href="scancodes.html">Scancodes</a>
+    <a href="dead-commands.html" aria-current="page">Dead commands</a>
+  </nav>
+  <span class="spacer"></span>
+  <button class="searchbtn" id="searchBtn" aria-label="Search the docs">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+    <span class="label">Search docs…</span><kbd>Ctrl K</kbd>
+  </button>
+  <a class="icon-btn" href="https://github.com/sLix1337x/autoexec" aria-label="Repository on GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.06-.72.08-.7.08-.7 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.1-.76.4-1.27.74-1.56-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg></a>
+  <button class="icon-btn" id="themeBtn" aria-label="Toggle light or dark theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+</header>
+
+<div class="layout">
+
+<aside class="sidebar" id="sidebar">
+  <details class="nav-group" open>
+    <summary>Dead &amp; blocked</summary>
+    <a href="#how"><span class="num">00</span>Check it yourself</a>
+    <a href="#gone"><span class="num">01</span>Gone: unknown command</a>
+    <a href="#blocked"><span class="num">02</span>Blocked by the engine</a>
+    <a href="#renamed"><span class="num">03</span>Renamed, not removed</a>
+    <a href="#startup"><span class="num">04</span>Startup-only convars</a>
+    <a href="#usage"><span class="num">05</span>Commands vs convars</a>
+    <a href="#contrib"><span class="num">06</span>Contributing an entry</a>
+  </details>
+
+  <details class="nav-group" open>
+    <summary>Other pages</summary>
+    <a href="index.html">Config reference</a>
+    <a href="scancodes.html">Scancode table</a>
+    <a href="index.html#ref-cvars">Convar reference</a>
+    <a href="index.html#ref-debug">Debugging a config</a>
+    <a href="https://github.com/sLix1337x/autoexec">Repository</a>
+  </details>
+</aside>
+
+<main id="content">
+
+<div class="page-head">
+  <p class="eyebrow">Reference</p>
+  <h1>Dead &amp; blocked commands</h1>
+  <p class="lead">Half the CS2 config advice online is a CS:GO config with a new title. This page lists commands that do <em>not</em> work in current CS2, each one checked in the console, with the exact message the game prints back.</p>
+  <div class="hero-links">
+    <a class="btn primary" href="#gone">See what is gone</a>
+    <a class="btn" href="index.html#ref-cvars">Convar reference</a>
+  </div>
+</div>
+
+<section id="how">
+  <h2><span class="n">00</span> Check it yourself, in ten seconds</h2>
+  <p>Type the bare name into the developer console. There are only three possible answers, and they tell you everything:</p>
+  <table>
+    <thead><tr><th>Console prints</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><code>Unknown command: x</code></td><td>It does not exist in current CS2. The line is dead weight in a config and can be deleted.</td></tr>
+      <tr><td><code>"x" = "value"</code> plus a description</td><td>It exists. Whether you may <em>change</em> it is a separate question; see <a href="#blocked">blocked</a>.</td></tr>
+      <tr><td><code>usage: x &lt;arg&gt;</code></td><td>It exists and it is a command, not a convar, so it wants an argument. See <a href="#usage">wrong usage</a>.</td></tr>
+    </tbody>
+  </table>
+  <div class="note">
+    <p>To capture a batch of answers instead of squinting at the console, add <code>-condebug</code> to your launch options; add <code>-conclearlog</code> after it to wipe the file each launch. Output lands in <code>game\csgo\console.log</code>.</p>
+    <p><strong>One catch.</strong> The log captures <code>Unknown command</code> lines, <code>exec</code> traces, bind translations and command usage lines, but not convar values, not <code>echo</code> output and not <code>help</code> output. That makes it an exact record of what does <em>not</em> exist: run a batch of names, and any name that never appears in the log exists. For reading values, read the console itself.</p>
+  </div>
+  <p><code>find &lt;text&gt;</code> is the other half of it: the search covers command names <em>and</em> their descriptions, so <code>find crosshair</code> lists what your build offers instead of what a 2019 guide remembers.</p>
+  <div class="warn">
+    <p><strong>One exception to the three answers.</strong> A few names are rejected by the console yet still read while the game starts, so they work as a <code>+name value</code> launch option. <code>Unknown command</code> rules out the console, not the launch path. See <a href="#startup">startup-only convars</a>.</p>
+  </div>
+</section>
+
+<section id="gone">
+  <h2><span class="n">01</span> Gone: <code>Unknown command</code></h2>
+  <p>These are still recommended by guides, videos and copy-pasted "pro configs". In current CS2 they do nothing at all: the line is parsed, rejected and skipped, and the rest of your config carries on.</p>
+  <p class="muted">Every row below was answered with <code>Unknown command</code> by a current CS2 client. Nothing is listed here on the strength of a web page.</p>
+
+  <h3>Mouse</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Dead</th><th>What it was for</th><th>What works instead</th></tr></thead>
+    <tbody>
+      <tr><td><code>m_rawinput</code></td><td>force raw mouse input</td><td>nothing to set: no convar of that name exists</td></tr>
+      <tr><td><code>m_customaccel</code></td><td>in-game mouse acceleration</td><td>—</td></tr>
+      <tr><td><code>zoom_sensitivity_ratio_mouse</code></td><td>scoped sensitivity</td><td><code>zoom_sensitivity_ratio</code>; the CS:GO name lost its suffix</td></tr>
+      <tr><td><code>cl_mouselook</code></td><td>mouse controls the view</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Viewmodel &amp; hands</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Dead</th><th>What it was for</th><th>What works instead</th></tr></thead>
+    <tbody>
+      <tr><td><code>cl_righthand</code></td><td>which hand holds the weapon</td><td><code>switchhands</code> (a command, flips now) and <code>cl_prefer_lefthanded</code></td></tr>
+      <tr><td><code>+switchhands</code></td><td>hold to flip hands</td><td><code>Unknown command '+switchhands'!</code> There is no hold form, only the plain command</td></tr>
+      <tr><td><code>viewmodel_recoil</code></td><td>viewmodel recoil amount</td><td>—</td></tr>
+      <tr><td><code>cl_bobcycle</code>, <code>cl_bob_lower_amt</code></td><td>weapon bob while running</td><td>the whole <code>cl_bob*</code> family is gone</td></tr>
+    </tbody>
+  </table>
+
+  <h3>HUD &amp; net graph</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Dead</th><th>What it was for</th><th>What works instead</th></tr></thead>
+    <tbody>
+      <tr><td><code>net_graph</code></td><td>network graph overlay</td><td rowspan="2">neither name exists; <code>cl_showfps</code> is the readout that does answer</td></tr>
+      <tr><td><code>cq_netgraph</code></td><td>the "CS2 replacement" every list names</td></tr>
+      <tr><td><code>cl_show_team_equipment</code></td><td>teammate names/gear through walls</td><td>—</td></tr>
+      <tr><td><code>cl_hud_playercount_showcount</code></td><td>compact player count on the HUD</td><td>—</td></tr>
+      <tr><td><code>cl_hud_bomb_under_radar</code></td><td>bomb icon under the radar</td><td>—</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><p><code>cq_netgraph</code> is the interesting one: it is widely posted as <em>the</em> CS2 replacement for <code>net_graph</code>, and current CS2 does not have it either. What CS2 does have is the <code>cl_hud_telemetry_*</code> family (<code>frametime_show</code>, <code>ping_show</code>, <code>net_misdelivery_show</code>, <code>serverrecvmargin_graph_show</code>), listed on the <a href="index.html#ref-cvars">convar reference</a>. Note <code>cl_hud_telemetry_net_quality_show</code> and <code>cl_hud_telemetry_serverrecvmargin_show</code> are <em>not</em> among them.</p></div>
+
+  <h3>HUD, second pass</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Dead</th><th>What it was for</th><th>What works instead</th></tr></thead>
+    <tbody>
+      <tr><td><code>cl_hud_healthammo_style</code></td><td>compact health/ammo block</td><td>—</td></tr>
+      <tr><td><code>cl_hud_background_alpha</code></td><td>HUD background opacity</td><td>—</td></tr>
+      <tr><td><code>cl_teamid_overhead_always</code></td><td>always show teammate IDs through walls</td><td><code>cl_teamid_overhead_mode</code> exists</td></tr>
+      <tr><td><code>safezone</code></td><td>HUD safe area</td><td><code>safezonex</code> and <code>safezoney</code>, separately</td></tr>
+      <tr><td><code>cl_ping_display</code></td><td>ping on the HUD</td><td><code>cl_hud_telemetry_ping_show</code></td></tr>
+      <tr><td><code>cl_freezecameffects_showholiday</code>, <code>cl_dm_buymenu_show_stats</code></td><td>misc HUD extras</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Voice</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Dead</th><th>What it was for</th><th>What works instead</th></tr></thead>
+    <tbody>
+      <tr><td><code>voice_enable</code></td><td>toggle hearing teammates, the classic "clutch mute" bind</td><td><code>voice_modenable</code>. Every guide writes the bind with <code>voice_enable</code>; the working name is one word longer</td></tr>
+      <tr><td><code>voice_scale</code></td><td>incoming voice volume</td><td><code>snd_voipvolume</code></td></tr>
+      <tr><td><code>voice_mixer_volume</code>, <code>voice_mixer_mute</code></td><td>mic level and mute</td><td><code>voice_threshold</code> and <code>voice_loopback</code> exist</td></tr>
+      <tr><td><code>voice_positional</code></td><td>positional voice</td><td>—</td></tr>
+      <tr><td><code>snd_mute_voice_losefocus</code></td><td>mute voice when alt-tabbed</td><td>—</td></tr>
+      <tr><td><code>snd_dzmusic_volume</code>, <code>snd_music_selection</code></td><td>Danger Zone music, music kit picker</td><td><code>snd_musicvolume</code> and the per-event <code>snd_*_volume</code> convars</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Networking</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Dead</th><th>What it was for</th><th>What works instead</th></tr></thead>
+    <tbody>
+      <tr><td><code>cl_updaterate</code></td><td>server updates per second</td><td>nothing. Even though the <code>cl_interp</code> error message quotes <code>cl_updaterate=64</code>, the convar itself is not exposed</td></tr>
+      <tr><td><code>cl_cmdrate</code></td><td>commands sent per second</td><td>—</td></tr>
+      <tr><td><code>cl_lagcompensation</code></td><td>lag compensation toggle</td><td>—</td></tr>
+      <tr><td><code>cl_predict</code>, <code>cl_predictweapons</code></td><td>client-side prediction</td><td>the <code>cl_predict_*_fx</code> convars are a different, still-living family</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Performance &amp; misc</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Dead</th><th>What it was for</th><th>What works instead</th></tr></thead>
+    <tbody>
+      <tr><td><code>fps_max_menu</code></td><td>menu frame cap</td><td><code>fps_max_ui</code></td></tr>
+      <tr><td><code>cl_disablefreezecam</code></td><td>skip the death cam</td><td>not a convar any more; the setting lives in the menu</td></tr>
+      <tr><td><code>cl_showhelp</code></td><td>hint pop-ups</td><td><code>cl_autohelp</code> survived; <code>cl_showhelp</code> did not</td></tr>
+      <tr><td><code>cl_join_advertise</code></td><td>let friends join your game</td><td><code>cl_invites_only_friends</code> / <code>cl_invites_only_mainmenu</code> exist and cover the invite side</td></tr>
+      <tr><td><code>cl_disablehtmlmotd</code></td><td>block server MOTD pages</td><td>—</td></tr>
+      <tr><td><code>cl_forcepreload</code></td><td>preload map assets</td><td>—</td></tr>
+      <tr><td><code>cl_downloadfilter</code></td><td>block custom server downloads</td><td>—</td></tr>
+      <tr><td><code>mat_queue_mode</code></td><td>multicore rendering mode</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Console &amp; binds</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Dead</th><th>What it was for</th><th>What works instead</th></tr></thead>
+    <tbody>
+      <tr><td><code>bind_list</code></td><td>dump every current bind</td><td><code>key_findbinding &lt;substring&gt;</code></td></tr>
+      <tr><td><code>con_filter_text</code>, <code>con_filter_text_out</code>, <code>con_filter_enable</code></td><td>console filtering, the "display damage" recipe</td><td>the whole family is gone. <code>con_enable</code>, <code>developer</code> and <code>log_color</code> do exist</td></tr>
+      <tr><td><code>con_logfile</code>, <code>con_timestamp</code></td><td>log console output to a file</td><td>the <code>-condebug</code> launch option, which writes <code>game\csgo\console.log</code></td></tr>
+      <tr><td><code>key_listboxes</code>, <code>bindlist</code>, <code>listbinds</code></td><td>dump binds</td><td><code>key_findbinding &lt;substring&gt;</code>, or bare <code>alias</code> to dump every alias</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Commands that were never commands</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Dead</th><th>What guides build on it</th><th>Reality</th></tr></thead>
+    <tbody>
+      <tr><td><code>buy</code></td><td>buy binds, as in <code>bind kp_end "buy ak47"</code></td><td><code>Unknown command</code>. There is no buy console command in CS2, so buy binds do not exist as a feature, however many guides list them</td></tr>
+      <tr><td><code>disconnect_notimeout</code></td><td>leaving a server cleanly</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Practice</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Dead</th><th>What it was for</th><th>What works instead</th></tr></thead>
+    <tbody>
+      <tr><td><code>sv_grenade_trajectory</code>, <code>sv_grenade_trajectory_dash</code></td><td>draw grenade arcs</td><td><code>sv_grenade_trajectory_prac_pipreview</code> and <code>sv_grenade_trajectory_prac_trailtime</code></td></tr>
+      <tr><td><code>sv_infinite_smoke_grenade</code></td><td>unlimited smokes</td><td><code>sv_infinite_ammo</code> plus <code>ammo_grenade_limit_total</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Video</h3>
+  <table class="cmdtable">
+    <thead><tr><th>Dead</th><th>What it was for</th><th>What works instead</th></tr></thead>
+    <tbody>
+      <tr><td><code>mat_vsync</code>, <code>mat_monitorgamma</code></td><td>vsync and brightness from a cfg</td><td>video settings live in the menu and <code>cs2_video.txt</code>, not in configs</td></tr>
+      <tr><td><code>mat_queue_mode</code>, <code>cl_forcepreload</code></td><td>two thirds of the classic "fps boost cfg" trio</td><td>nothing. A cfg built on these does literally nothing. The third, <code>r_dynamic</code>, is a different case: see <a href="#startup">startup-only convars</a></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="blocked">
+  <h2><span class="n">02</span> Blocked: it exists, the engine refuses</h2>
+  <p>Worse than a dead command, because the name resolves and the guide looks right. The engine declines the write, and it tells you so.</p>
+  <table class="cmdtable">
+    <thead><tr><th>Command</th><th>What happens</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>cl_interp</code></td>
+        <td>
+          <pre><code>Cannot change the value of cl_interp.  Please remove this command from your script
+cl_interp = 0.000000 (cl_interp_ratio=0 / cl_updaterate=64)</code></pre>
+          CS2 derives interpolation from <code>cl_interp_ratio</code> and <code>cl_updaterate</code> and owns the result. The old CS:GO habit of pinning <code>cl_interp 0.015625</code> buys you an error message on every launch. Delete it.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="note">
+    <p>The other blocked class is <strong>cheat and replicated convars</strong>: <code>sv_cheats</code>-flagged commands are refused on any server you do not control, and replicated ones are dictated by the server whatever your config says. <code>help &lt;name&gt;</code> prints the flags that decide this.</p>
+  </div>
+</section>
+
+<section id="renamed">
+  <h2><span class="n">03</span> Renamed, not removed</h2>
+  <p>The feature survived the move to Source 2, the name did not. Copying the CS:GO name gets you an <code>Unknown command</code>; the replacement does what you wanted.</p>
+  <table class="cmdtable">
+    <thead><tr><th>CS:GO</th><th>CS2</th><th>Both sides verified</th></tr></thead>
+    <tbody>
+      <tr><td><code>zoom_sensitivity_ratio_mouse</code></td><td><code>zoom_sensitivity_ratio</code></td><td>yes; old name unknown, new name returns a value</td></tr>
+      <tr><td><code>fps_max_menu</code></td><td><code>fps_max_ui</code></td><td>yes</td></tr>
+      <tr><td><code>bind_list</code></td><td><code>key_findbinding &lt;substring&gt;</code></td><td>yes</td></tr>
+      <tr><td><code>cl_righthand</code></td><td><code>switchhands</code> <span class="muted">+</span> <code>cl_prefer_lefthanded</code></td><td>yes</td></tr>
+    </tbody>
+  </table>
+  <div class="warn">
+    <p><strong>No replacement found is not the same as renamed.</strong> <code>net_graph</code>, <code>voice_enable</code>, <code>con_filter_text</code> and <code>cl_disablefreezecam</code> are gone here, and the "CS2 equivalents" posted around the web (<code>cq_netgraph</code> for the first one especially) came back <code>Unknown command</code> too. If a replacement turns up in the console, it gets added; guesses do not.</p>
+  </div>
+</section>
+
+<section id="startup">
+  <h2><span class="n">04</span> Startup-only: unknown in console, read at launch</h2>
+  <p>A fourth answer that looks exactly like death: the name is rejected by the runtime console, but the engine still reads it while it is starting up. Typing it in-game proves nothing about whether setting it at launch does something.</p>
+  <table class="cmdtable">
+    <thead><tr><th>Name</th><th>In the console</th><th>At launch</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>r_dynamic</code></td>
+        <td><code>Unknown command</code>, the same answer the genuinely dead names give</td>
+        <td>Works when set at launch. <code>+r_dynamic 0</code> in Steam's launch options is read while the game starts and the value holds. <span class="pend">pending</span> the effect is observed in game, not yet pinned to a line in <code>console.log</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="warn">
+    <p><strong>This is why <code>Unknown command</code> alone is not proof.</strong> It says the name is not registered in the console at the moment you typed it. It does not say the engine never looks at that name. Anything you set through Steam's launch options is applied on a different path from the one the console uses.</p>
+  </div>
+  <p>The distinction matters for how you write a config: a startup-only convar cannot live in <code>autoexec.cfg</code>, because the autoexec is exec'd through the console and gets the same <code>Unknown command</code>. It belongs in the launch options, prefixed with <code>+</code>:</p>
+  <pre><code>-condebug +r_dynamic 0</code></pre>
+  <p>To check one yourself: launch with <code>-condebug</code> and the <code>+name value</code> option set, then read <code>game\csgo\console.log</code>. A name that never appears there as an unknown command was accepted at startup, whatever the console says about it later.</p>
+</section>
+
+<section id="usage">
+  <h2><span class="n">05</span> Commands vs convars</h2>
+  <p>A usage line means the name exists. CS2 has two kinds of names and they answer differently: a <strong>convar</strong> holds a value and prints it, a <strong>command</strong> does something and takes arguments, so bare it prints how to call it.</p>
+  <p>Reference for the argument forms that are easy to get wrong:</p>
+  <pre><code>usage: key_findbinding &lt;substring&gt; [splitscreen player]
+
+Usage: incrementvar varName minValue maxValue delta
+
+Usage: toggle varName [... optional list of valid values to cycle]
+
+cl_ticktiming usage:
+  cl_ticktiming print [summary|detail]   Print stats now.  Default detail level is 'detail'
+  cl_ticktiming &lt;N&gt;   [summary|detail]   Print stats periodically, every N ticks.
+                                         N=0 to disable.  Default detail level is 'summary'</code></pre>
+  <p><code>cl_ticktiming</code> needs <code>print</code> or a tick interval; bare it only describes itself. <code>log_color</code> is the same shape, taking a channel name and an RGBA value: <code>log_color "Console" "FF25FFFF"</code>. Bare <code>alias</code> is the other one to remember: it dumps every alias currently defined, which is the quickest way to see whether a config loaded.</p>
+</section>
+
+<section id="contrib">
+  <h2><span class="n">06</span> Contributing an entry</h2>
+  <p>The bar for an entry is one console line, not a forum post: the command, and what CS2 printed back. Open an issue with that output and the date. Builds change, and an entry that has silently become wrong is worse than no entry at all.</p>
+
+</section>
+
+<nav class="pagenav">
+  <a href="scancodes.html"><span class="dir">Previous</span>← Scancode table</a>
+</nav>
+
+<footer>
+  CS2 Config Docs · <a href="https://github.com/sLix1337x/autoexec">sLix1337x/autoexec</a> · MIT licensed<br>
+  <span class="muted">Every entry verified in the console. Re-check after a major update.</span>
+</footer>
+
+</main>
+
+<aside class="toc">
+  <p class="toc-title">On this page</p>
+  <nav></nav>
+</aside>
+
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<div class="searchmodal" id="searchModal" hidden>
+  <div class="searchbox">
+    <input type="search" placeholder="Search headings, convars, commands…" aria-label="Search the docs" autocomplete="off" spellcheck="false">
+    <div class="results"></div>
+    <div class="search-foot">
+      <span><kbd class="key">↑</kbd><kbd class="key">↓</kbd> navigate</span>
+      <span><kbd class="key">↵</kbd> open</span>
+      <span><kbd class="key">esc</kbd> close</span>
+    </div>
+  </div>
+</div>
+
+<script src="docs.js" defer></script>
+
+</body>
+</html>
